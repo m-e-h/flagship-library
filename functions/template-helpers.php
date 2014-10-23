@@ -10,6 +10,40 @@
  * @since       1.0.0
  */
 
+add_action( 'wp_head', 'flagship_load_favicon' );
+/**
+ * Echos a favicon link if one is found and falls back to the default Flagship
+ * theme favicon when no custom one has been set.
+ *
+ * URL to favicon is filtered via `flagship_favicon_url` before being echoed.
+ *
+ * @since  1.0.0
+ * @access public
+ * @return void
+ */
+function flagship_load_favicon() {
+	$parent_uri = trailingslashit( get_template_directory_uri() );
+	$child_uri  = trailingslashit( get_stylesheet_directory_uri() );
+
+	$favicon = $parent_uri . 'images/favicon.ico';
+
+	//* Allow child theme to short-circuit this function
+	$pre = apply_filters( 'flagship_pre_load_favicon', false );
+
+	if ( $pre !== false ) {
+		$favicon = $pre;
+	}
+	elseif ( file_exists( $child_uri . 'images/favicon.ico' ) ) {
+		$favicon = $child_uri . 'images/favicon.ico';
+	}
+
+	$favicon = apply_filters( 'flagship_favicon_url', $favicon );
+
+	if ( $favicon ) {
+		echo '<link rel="Shortcut Icon" href="' . esc_url( $favicon ) . '" type="image/x-icon" />' . "\n";
+	}
+}
+
 /**
  * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
  * header right sidebar.
