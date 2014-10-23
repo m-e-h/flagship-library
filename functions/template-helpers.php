@@ -200,9 +200,9 @@ function flagship_get_entry_comments_link( $args = array() ) {
 			'after'       => '',
 			'before'      => '',
 			'hide_if_off' => 'enabled',
-			'more'        => __( '% Comments', 'compass' ),
-			'one'         => __( '1 Comment', 'compass' ),
-			'zero'        => __( 'Leave a Comment', 'compass' ),
+			'more'        => __( '% Comments', 'flagship-library' ),
+			'one'         => __( '1 Comment', 'flagship-library' ),
+			'zero'        => __( 'Leave a Comment', 'flagship-library' ),
 		)
 	);
 	$args = wp_parse_args( $args, $defaults );
@@ -249,8 +249,8 @@ function flagship_register_footer_widget_areas() {
 		hybrid_register_sidebar(
 			array(
 				'id'          => sprintf( 'footer-%d', $counter ),
-				'name'        => sprintf( __( 'Footer %d', 'compass' ), $counter ),
-				'description' => sprintf( __( 'Footer %d widget area.', 'compass' ), $counter ),
+				'name'        => sprintf( __( 'Footer %d', 'flagship-library' ), $counter ),
+				'description' => sprintf( __( 'Footer %d widget area.', 'flagship-library' ), $counter ),
 			)
 		);
 
