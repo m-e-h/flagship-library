@@ -81,7 +81,7 @@ class Flagship_Search_Form {
 	 */
 	protected function get_button() {
 		return sprintf(
-			'<button type="submit" aria-label="%1$s"><span class="screen-reader-text">%2$s</span>%2$s</button>',
+			'<button type="submit" aria-label="%1$s"><span class="screen-reader-text">%2$s</span></button>',
 			esc_attr( apply_filters( 'flagship_search_button_label', __( 'Search', 'compass' ) ) ),
 			esc_attr( apply_filters( 'flagship_search_button_text', __( 'Search', 'compass' ) ) )
 		);
