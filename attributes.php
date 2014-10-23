@@ -29,7 +29,10 @@ add_filter( 'hybrid_attr_site-title',       'flagship_attr_site_title_class' );
 add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class'  );
 
 // Post-specific attributes.
-add_filter( 'hybrid_attr_entry-summary',   'flagship_attr_entry_summary_class' );
+add_filter( 'hybrid_attr_entry-summary', 'flagship_attr_entry_summary_class' );
+
+// Other attributes.
+add_filter( 'hybrid_attr_author-box', 'flagship_attr_author_box', 10, 2 );
 
 /**
  * Page <header> element attributes.
@@ -186,5 +189,31 @@ function flagship_attr_site_desc_class( $attr ) {
  */
 function flagship_attr_entry_summary_class( $attr ) {
 	$attr['class'] = 'entry-content summary';
+	return $attr;
+}
+
+/**
+ * Author box attributes.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @param  string $context
+ * @return array
+ */
+function flagship_attr_author_box( $attr, $context ) {
+	$class      = 'author-box';
+	$attr['id'] = 'author-box';
+
+	if ( ! empty( $context ) ) {
+		$attr['id'] = "author-box-{$context}";
+		$class    .= " author-box-{$context}";
+	}
+
+	$attr['class']     = $class;
+	$attr['itemscope'] = 'itemscope';
+	$attr['itemtype']  = 'http://schema.org/Person';
+	$attr['itemprop']  = 'author';
+
 	return $attr;
 }
