@@ -17,8 +17,8 @@
 
 // Attributes for major structural elements.
 add_filter( 'hybrid_attr_header',         'flagship_attr_header_class'         );
-add_filter( 'hybrid_attr_site_container', 'flagship_attr_site_container'       );
-add_filter( 'hybrid_attr_site_inner',     'flagship_attr_site_inner'           );
+add_filter( 'hybrid_attr_site-container', 'flagship_attr_site_container'       );
+add_filter( 'hybrid_attr_site-inner',     'flagship_attr_site_inner'           );
 add_filter( 'hybrid_attr_content',        'flagship_attr_content_class'        );
 add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class'         );
 add_filter( 'hybrid_attr_sidebar',        'flagship_attr_sidebar_class', 10, 2 );
@@ -50,7 +50,7 @@ function flagship_attr_header_class( $attr ) {
 }
 
 /**
- * Page <header> element attributes.
+ * Page site container element attributes.
  *
  * @since  1.0.0
  * @access public
@@ -64,7 +64,7 @@ function flagship_attr_site_container( $attr ) {
 }
 
 /**
- * Page <header> element attributes.
+ * Page site inner element attributes.
  *
  * @since  1.0.0
  * @access public
