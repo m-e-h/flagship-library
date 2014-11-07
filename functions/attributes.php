@@ -16,12 +16,14 @@
  */
 
 // Attributes for major structural elements.
-add_filter( 'hybrid_attr_header',      'flagship_attr_header_class'         );
-add_filter( 'hybrid_attr_content',     'flagship_attr_content_class'        );
-add_filter( 'hybrid_attr_footer',      'flagship_attr_footer_class'         );
-add_filter( 'hybrid_attr_sidebar',     'flagship_attr_sidebar_class', 10, 2 );
-add_filter( 'hybrid_attr_menu',        'flagship_attr_menu_class',    10, 2 );
-add_filter( 'hybrid_attr_widget-menu', 'flagship_attr_widget_menu',   10, 2 );
+add_filter( 'hybrid_attr_header',         'flagship_attr_header_class'         );
+add_filter( 'hybrid_attr_site_container', 'flagship_attr_site_container'       );
+add_filter( 'hybrid_attr_site_inner',     'flagship_attr_site_inner'           );
+add_filter( 'hybrid_attr_content',        'flagship_attr_content_class'        );
+add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class'         );
+add_filter( 'hybrid_attr_sidebar',        'flagship_attr_sidebar_class', 10, 2 );
+add_filter( 'hybrid_attr_menu',           'flagship_attr_menu_class',    10, 2 );
+add_filter( 'hybrid_attr_widget-menu',    'flagship_attr_widget_menu',   10, 2 );
 
 // Header attributes.
 add_filter( 'hybrid_attr_branding',         'flagship_attr_branding_class'   );
@@ -44,6 +46,34 @@ add_filter( 'hybrid_attr_author-box', 'flagship_attr_author_box', 10, 2 );
  */
 function flagship_attr_header_class( $attr ) {
 	$attr['class'] = 'header';
+	return $attr;
+}
+
+/**
+ * Page <header> element attributes.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_site_container( $attr ) {
+	$attr['id']    = 'site-container';
+	$attr['class'] = 'site-container';
+	return $attr;
+}
+
+/**
+ * Page <header> element attributes.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_site_inner( $attr ) {
+	$attr['id']    = 'site-inner';
+	$attr['class'] = 'site-inner';
 	return $attr;
 }
 
