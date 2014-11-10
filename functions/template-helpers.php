@@ -285,7 +285,7 @@ function flagship_footer_widgets() {
 
 	?>
 	<div <?php hybrid_attr( 'footer-widgets' ); ?>>
-		<div class="wrap">
+		<div <?php hybrid_attr( 'wrap', 'footer-widgets' ); ?>>
 			<?php while ( $counter <= $footer_widgets ) : ?>
 				<?php include( locate_template( 'sidebar/footer-widgets.php' ) ); ?>
 				<?php $counter++; ?>
