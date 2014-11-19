@@ -20,6 +20,14 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 	class Flagship_Library {
 
 		/**
+		 * Our library version number.
+		 *
+		 * @since 1.1.0
+		 * @type  string
+		 */
+		protected $version = '1.0.0';
+
+		/**
 		 * Prefix to prevent conflicts.
 		 *
 		 * Used to prefix filters to make them unique.
@@ -65,7 +73,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'affiliate-wp' ), '1.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'flagship-library' ), '1.0' );
 		}
 
 		/**
@@ -77,7 +85,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 */
 		public function __wakeup() {
 			// Unserializing instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'affiliate-wp' ), '1.0' );
+			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'flagship-library' ), '1.0' );
 		}
 
 		/**
@@ -201,6 +209,7 @@ if ( ! function_exists( 'flagship_library' ) ) {
 	 * <?php flagship_library()->is_customizer_preview(); ?>
 	 *
 	 * @version 1.0.0
+	 * @return  object Flagship_Library
 	 */
 	function flagship_library() {
 		return Flagship_Library::instance();
