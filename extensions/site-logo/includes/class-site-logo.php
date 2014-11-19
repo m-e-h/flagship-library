@@ -274,7 +274,7 @@ class Flagship_Site_Logo {
 	 * @return mixed The URL or ID of our site logo, false if not set
 	 * @since 1.0
 	 */
-	function get_site_logo( $show = 'url' ) {
+	function get_site_logo( $format = 'url' ) {
 		$logo = $this->logo;
 
 		// Return false if no logo is set
@@ -283,7 +283,7 @@ class Flagship_Site_Logo {
 		}
 
 		// Return the ID if specified, otherwise return the URL by default
-		if ( 'id' == $show ) {
+		if ( 'id' === $format ) {
 			return $logo['id'];
 		}
 
