@@ -156,7 +156,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @access  private
 		 * @return  void
 		 */
-		public function includes() {
+		private function includes() {
 			// Set up an array of library file paths which can be filtered.
 			$includes = apply_filters( 'flagship_library_includes',
 				array(
@@ -181,7 +181,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @access  private
 		 * @return  void
 		 */
-		public function extensions_includes() {
+		private function extensions_includes() {
 			$extensions_dir = trailingslashit( $this->get_library_directory() ) . 'extensions/';
 			require_if_theme_supports( 'site-logo', $extensions_dir . 'site-logo/init.php' );
 			require_if_theme_supports( 'breadcrumb-trail', $extensions_dir . 'breadcrumb-display/init.php' );
