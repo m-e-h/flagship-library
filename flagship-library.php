@@ -32,7 +32,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Static placeholder for our main class instance.
 		 *
-		 * @since 1.0.0
+		 * @since 1.1.0
 		 * @var   Flagship_Library
 		 */
 		private static $instance;
@@ -59,7 +59,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * The whole idea of the singleton design pattern is that there is a single
 		 * object therefore, we don't want the object to be cloned.
 		 *
-		 * @since  1.0.0
+		 * @since  1.1.0
 		 * @access protected
 		 * @return void
 		 */
@@ -71,7 +71,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Disable unserializing of the class
 		 *
-		 * @since  1.0.0
+		 * @since  1.1.0
 		 * @access protected
 		 * @return void
 		 */
@@ -86,7 +86,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * Insures that only one instance of Flagship_Library exists in memory at any one
 		 * time. Also prevents needing to define globals all over the place.
 		 *
-		 * @since 1.0.0
+		 * @since 1.1.0
 		 * @static
 		 * @uses   Flagship_Library::includes() Include the required files
 		 * @return Flagship_Library
