@@ -14,9 +14,9 @@ add_filter( 'hybrid_content_template_hierarchy', 'flagship_content_template_hier
 /**
  * Search the template paths and replace them with singular and archive versions.
  *
- * By default, the content template heirarchy forces you to add logic for single
- * and archive content within the templates themsleves. This makes the templates
- * overly complex and I would prefer to seperate them into individual files.
+ * By default, the content template hierarchy forces you to add logic for single
+ * and archive content within the templates themselves. This makes the templates
+ * overly complex and I would prefer to separate them into individual files.
  *
  * @since  1.0.0
  * @access public

@@ -15,7 +15,7 @@
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  array $args
  * @return void
  */
 function flagship_entry_author( $args = array() ) {
@@ -62,10 +62,11 @@ function flagship_entry_published( $args = array() ) {
 }
 
 /**
- * Function for getting the current post's author in The Loop and linking to the author archive page.
- * This function was created because core WordPress does not have template tags with proper translation
- * and RTL support for this.  An equivalent getter function for `the_author_posts_link()` would
- * instantly solve this issue.
+ * Function for getting the current post's author in The Loop and linking to t
+ * he author archive page. This function was created because core WordPress does
+ * not have template tags with proper translation and RTL support for this.
+ * An equivalent getter function for `the_author_posts_link()` would instantly
+ * solve this issue.
  *
  * @since  1.1.0
  * @access public
