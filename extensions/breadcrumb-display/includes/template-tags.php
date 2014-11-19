@@ -21,7 +21,7 @@ function flagship_display_breadcrumbs() {
 	$breadcrumb_options = array_keys( flagship_breadcrumb_display()->get_breadcrumb_options() );
 	// Set up an array of template tags to map to our breadcrumb display options.
 	$template_tags = array(
-		is_singular(),
+		is_singular() && ! is_attachment(),
 		is_page(),
 		is_home() && ! is_front_page(),
 		is_archive(),
