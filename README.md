@@ -34,19 +34,37 @@ This is a simple customizer section which allows the user to choose where he or 
 
 `add_theme_support( 'breadcrumb-trail' );`
 
+In addition to adding theme support, you'll also need to make sure a breadcrumb template [like the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/sidebar/footer-widgets.php) exists in your theme. Because the footer widgets are hooked in place, you won't need to do anything else. If for some reason you'd like to change the hook location, you can do so by unhooking the default location.
+
+`remove_action( 'tha_footer_before', array( flagship_footer_widgets(), 'footer_widgets' ) );`
+
 ### Footer Widgets
 
 Footer widgets are a common design pattern in both our themes and many other WordPress themes on the market. There's not a whole lot to this extension, it just streamlines the method of registering footer widget sidebars. If you'd like to use it, add support for the flagship-footer-widgets in your theme and include a number to represent the number of footer widgets you'd like to register.
 
 `add_theme_support( 'flagship-footer-widgets', 3 );`
 
+Once support has been added, you'll have to create a template like [the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/menu/breadcrumbs.php) to format the display of your footer widgets.
+
 ### Site Logo
 
-The site logo extension is based on and very similar to the site logo feature built into Jetpack. We've done a bit of refactoring on the code and changed the structure slightly, but generally speaking the feature is nearly identical to what's available in Jetpack. We wanted this functionality to be available to all of our customers regardless of whether or not they're using Jetpack, so it made sense to include it in our library.
+The site logo extension is based on and very similar to the site logo feature built into Jetpack. We've done a bit of refactoring on the code, but generally speaking the feature is nearly identical to what's available in Jetpack. We wanted this functionality to be available to all of our customers regardless of whether or not they're using Jetpack, so it made sense to include it in our library.
 
 Whenever Jetpack or the standalone Automattic site logo plugin are active, our class will deactivate itself and allow these plugins to function normally. To enable this extension, add support for the site-logo feature in your theme.
 
 `add_theme_support( 'site-logo' );`
+
+You can also pass in a size argument which will let you declare a custom size for your logo. To do this, simply add the size like this:
+
+`add_theme_support( 'site-logo', array( 'size' => 'medium', ) );`
+
+You can use any size image you want, including a custom size which you would need to add using the `add_image_size` [WordPress core function](http://codex.wordpress.org/Function_Reference/add_image_size).
+
+In addition to adding support, you'll need to add a template tag to your site's header.php file wherever you'd like the logo to be displayed. The tag you'll need to add is:
+
+`<?php flagship_the_logo(); ?>`
+
+We've opted for our own prefixed function which will fall back to the Jetpack and standalone plugin functions if either of them is active.
 
 ## The Future
 
