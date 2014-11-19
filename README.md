@@ -38,7 +38,7 @@ In addition to adding theme support, you'll also need to make sure a breadcrumb 
 
 ### Footer Widgets
 
-Footer widgets are a common design pattern in both our themes and many other WordPress themes on the market. There's not a whole lot to this extension, it just streamlines the method of registering footer widget sidebars. If you'd like to use it, add support for the flagship-footer-widgets in your theme and include a number to represent the number of footer widgets you'd like to register.
+Footer widgets are a common design pattern in both our themes and many other WordPress themes on the market. There's not a whole lot to this extension, it just streamlines the method of registering footer widget sidebars. If you'd like to use it, add support for Flagship footer widgets in your theme and include a number to represent the number of footer widget areas you'd like to register.
 
 `add_theme_support( 'flagship-footer-widgets', 3 );`
 
