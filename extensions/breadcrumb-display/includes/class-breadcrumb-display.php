@@ -130,7 +130,7 @@ class Flagship_Breadcrumb_Display {
 	 *
 	 * @since  1.1.0
 	 * @access public
-	 * @param  $input
+	 * @param  $value
 	 * @return int
 	 */
 	public function sanitize_checkbox( $value ) {
