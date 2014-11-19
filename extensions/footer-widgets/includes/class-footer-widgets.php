@@ -39,14 +39,14 @@ class Flagship_Footer_Widgets {
 	 *
 	 * @since  1.0.0
 	 * @access public
-	 * @uses   Flagship_Footer_Widgets::register_footer_sidebars()
-	 * @uses   Flagship_Footer_Widgets::footer_widgets()
+	 * @uses   Flagship_Footer_Widgets::register_footer_widgets()
+	 * @uses   Flagship_Footer_Widgets::the_footer_widgets()
 	 * @uses   add_action
 	 * @return void
 	 */
 	private function wp_hooks() {
-		add_action( 'widgets_init', array( $this, 'register_footer_sidebars' ) );
-		add_action( 'tha_footer_before', array( $this, 'footer_widgets' ) );
+		add_action( 'widgets_init', array( $this, 'register_footer_widgets' ) );
+		add_action( 'tha_footer_before', array( $this, 'the_footer_widgets' ) );
 	}
 
 	/**
@@ -57,7 +57,7 @@ class Flagship_Footer_Widgets {
 	 * @uses   register_sidebar() Register footer widget areas.
 	 * @return null Return early if there's no theme support.
 	 */
-	public function register_footer_sidebars() {
+	public function register_footer_widgets() {
 		// Return early if we don't have any footer widgets to display.
 		if ( ! isset( $this->footer_widgets[0] ) || ! is_numeric( $this->footer_widgets[0] ) ) {
 			return;
@@ -85,7 +85,7 @@ class Flagship_Footer_Widgets {
 	 * @uses   locate_template() Load the footer widget template.
 	 * @return null Return early if there's no theme support.
 	 */
-	public function footer_widgets() {
+	public function the_footer_widgets() {
 		// Return early if we don't have any footer widgets to display.
 		if ( ! isset( $this->footer_widgets[0] ) || ! is_numeric( $this->footer_widgets[0] ) ) {
 			return;

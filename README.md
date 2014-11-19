@@ -44,7 +44,7 @@ Footer widgets are a common design pattern in both our themes and many other Wor
 
 Once support has been added, you'll have to create a template like [the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/sidebar/footer-widgets.php) to format the display of your footer widgets. Because the footer widgets are hooked in place, you won't need to do anything else. If for some reason you'd like to change the hook location, you can do so by unhooking the default location.
 
-`remove_action( 'tha_footer_before', array( flagship_footer_widgets(), 'footer_widgets' ) );`
+`remove_action( 'tha_footer_before', array( flagship_footer_widgets(), 'the_footer_widgets' ) );`
 
 ### Site Logo
 
