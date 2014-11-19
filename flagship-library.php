@@ -148,6 +148,10 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Include required library files.
 		 *
+		 * If for some reason you would prefer that a particular file isn't
+		 * loaded you can use the flagship_library_includes filter to unset it
+		 * before the includes runs.
+		 *
 		 * @since   1.0.0
 		 * @access  private
 		 * @return  void
