@@ -1,3 +1,68 @@
 # Flagship Library
 
-A collection of classes and functions which enhance Flagship themes.
+A collection of helpful functions and classes to make creating an awesome theme more enjoyable.
+
+__Contributors:__ [Robert Neu](https://github.com/robneu)  
+__Requires:__ WordPress 4.0, Hybrid Core 2.0.3  
+__Tested up to:__ WordPress 4.0, Hybrid Core 2.0.3  
+__License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)  
+
+There are a lot of things that go into a well-crafted theme. You need to make sure everything is SEO-friendly, you have to format commonly re-used bits of markup, and now more than ever you need to make it easy for your users to interact with your theme using the WordPress customizer.
+
+The Flagship Library is a project designed to help with these things by delivering a modular, extensible library of reusable theme code. The primary reason it exists is for use in our [premium WordPress themes](http://flagshipwp.com), but we've released it open source for anyone else who would like to use or contribute to it.
+
+## Library Structure
+
+    .
+    ├── assets
+    │   ├── css
+    │   │   └── site-logo
+    │   └── js
+    │       └── site-logo
+    ├── classes
+    ├── extensions
+    │   ├── breadcrumb-display
+    │   ├── footer-widgets
+    │   └── site-logo
+    └── functions
+
+## Basic Features
+
+Most of the functionality in our library has to do with changing the markup and structure of our themes to suite our needs. If you find anything in the library you'd rather not use, you can either prevent it from loading entirely using the `flagship_library_includes` filter or by unhooking the functions directly.
+
+Currently, the main features include:
+
+- Filter markup to add classes using `hybrid_attr`
+- Filter the content directory structure using `hybrid_content_template_hierarchy`
+- Minor SEO adjustments
+- A simple favicon loader
+- A class to make the WordPress search form a11y compliant
+- Template helper functions for displaying entry meta data
+
+## Extensions
+
+In addition to the base features, we have also created a number of "extensions" which are only activated when a theme declares support for them. This list is likely to grow as we find new common features which we'd like to share throughout our theme collection. Currently, the following extensions are available:
+
+### Breadcrumb Display
+
+This is a simple customizer section which allows the user to choose where he or she would like breadcrumbs to display on their site. To enable this extension, add support for the [Hybrid Core breadcrumb trail]( https://github.com/justintadlock/breadcrumb-trail) feature.
+
+`add_theme_support( 'breadcrumb-trail' );`
+
+### Footer Widgets
+
+Footer widgets are a common design pattern in both our themes and many other WordPress themes on the market. There's not a whole lot to this extension, it just streamlines the method of registering footer widget sidebars. If you'd like to use it, add support for the flagship-footer-widgets in your theme and include a number to represent the number of footer widgets you'd like to register.
+
+`add_theme_support( 'flagship-footer-widgets', 3 );`
+
+### Site Logo
+
+The site logo extension is based on and very similar to the site logo feature built into Jetpack. We've done a bit of refactoring on the code and changed the structure slightly, but generally speaking the feature is nearly identical to what's available in Jetpack. We wanted this functionality to be available to all of our customers regardless of whether or not they're using Jetpack, so it made sense to include it in our library.
+
+Whenever Jetpack or the standalone Automattic site logo plugin are active, our class will deactivate itself and allow these plugins to function normally. To enable this extension, add support for the site-logo feature in your theme.
+
+`add_theme_support( 'site-logo' );`
+
+## The Future
+
+We plan on keeping this library as lightweight as possible, but we will be adding to it as we learn and expand our theme collection. If you'd like to contribute to the library, we're happily accepting ideas, bug reports, pull requests, and general feedback both here on GitHub and on our [community forums](http://community.flagshipwp.com).
