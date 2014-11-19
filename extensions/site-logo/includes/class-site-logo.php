@@ -307,7 +307,7 @@ class Flagship_Site_Logo {
 	 * @uses Flagship_Logo::logo
 	 * @uses Flagship_Logo::theme_size()
 	 * @uses Flagship_Logo::has_site_logo()
-	 * @uses Flagship_Library::is_customize_preview()
+	 * @uses Flagship_Library::is_customizer_preview()
 	 * @uses esc_url()
 	 * @uses home_url()
 	 * @uses esc_attr()
@@ -321,7 +321,7 @@ class Flagship_Site_Logo {
 
 		// Bail if no logo is set. Leave a placeholder if we're in the Customizer, though (needed for the live preview).
 		if ( ! $this->has_site_logo() ) {
-			if ( flagship_library()->is_customize_preview() ) {
+			if ( flagship_library()->is_customizer_preview() ) {
 				printf( '<a href="%1$s" class="site-logo-link" style="display:none;"><img class="site-logo" data-size="%2$s" /></a>',
 					esc_url( home_url( '/' ) ),
 					esc_attr( $size )
