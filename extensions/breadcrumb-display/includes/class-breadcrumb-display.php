@@ -60,7 +60,7 @@ class Flagship_Breadcrumb_Display {
 			array(
 				'title'       => __( 'Breadcrumbs', 'flagship-library' ),
 				'description' => __( 'Choose where you would like breadcrumbs to display.', 'flagship-library' ),
-				'priority'    => '50',
+				'priority'    => 110,
 			)
 		);
 
