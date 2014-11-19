@@ -62,7 +62,7 @@ You can use any size image you want, including a custom size which you would nee
 
 In addition to adding support, you'll need to add a template tag to your site's header.php file wherever you'd like the logo to be displayed. The tag you'll need to add is:
 
-`<?php flagship_the_logo(); ?>`
+`flagship_the_logo();`
 
 We've opted for our own prefixed function which will fall back to the Jetpack and standalone plugin functions if either of them is active.
 
