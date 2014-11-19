@@ -11,21 +11,6 @@ There are a lot of things that go into a well-crafted theme. You need to make su
 
 The Flagship Library is a project designed to help with these things by delivering a modular, extensible library of reusable theme code. The primary reason it exists is for use in our [premium WordPress themes](http://flagshipwp.com), but we've released it open source for anyone else who would like to use or contribute to it.
 
-## Library Structure
-
-    .
-    ├── assets
-    │   ├── css
-    │   │   └── site-logo
-    │   └── js
-    │       └── site-logo
-    ├── classes
-    ├── extensions
-    │   ├── breadcrumb-display
-    │   ├── footer-widgets
-    │   └── site-logo
-    └── functions
-
 ## Basic Features
 
 Most of the functionality in our library has to do with changing the markup and structure of our themes to suite our needs. If you find anything in the library you'd rather not use, you can either prevent it from loading entirely using the `flagship_library_includes` filter or by unhooking the functions directly.
