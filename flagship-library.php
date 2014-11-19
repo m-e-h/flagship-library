@@ -120,7 +120,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  bool
 		 */
 		public function is_wpcom() {
-			return defined( 'IS_WPCOM' ) && true === IS_WPCOM;
+			return apply_filters( 'flagship_library_is_wpcom', false );
 		}
 
 		/**
