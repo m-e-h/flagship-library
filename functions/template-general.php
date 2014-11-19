@@ -10,7 +10,7 @@
  * @since       1.0.0
  */
 
-add_action( 'wp_head', 'flagship_load_favicon' );
+add_action( 'wp_head', 'flagship_load_favicon', 5 );
 /**
  * Echos a favicon link if one is found and falls back to the default Flagship
  * theme favicon when no custom one has been set.
@@ -22,26 +22,27 @@ add_action( 'wp_head', 'flagship_load_favicon' );
  * @return void
  */
 function flagship_load_favicon() {
-	$parent_uri = trailingslashit( get_template_directory_uri() );
-	$child_uri  = trailingslashit( get_stylesheet_directory_uri() );
+	$favicon = '';
+	$path    = 'images/favicon.ico';
 
-	$favicon = $parent_uri . 'images/favicon.ico';
-
-	//* Allow child theme to short-circuit this function
-	$pre = apply_filters( 'flagship_pre_load_favicon', false );
-
-	if ( $pre !== false ) {
-		$favicon = $pre;
+	// Use the child theme favicon if it exists.
+	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $path ) ) {
+		$favicon = trailingslashit( get_stylesheet_directory_uri() ) . $path;
 	}
-	elseif ( file_exists( $child_uri . 'images/favicon.ico' ) ) {
-		$favicon = $child_uri . 'images/favicon.ico';
+	// Fall back to the parent favicon if it exists.
+	if ( file_exists( trailingslashit( get_template_directory() ) . $path ) ) {
+		$favicon = trailingslashit( get_template_directory_uri() ) . $path;
 	}
 
+	// Allow developers to set a custom favicon file.
 	$favicon = apply_filters( 'flagship_favicon_url', $favicon );
 
-	if ( $favicon ) {
-		echo '<link rel="Shortcut Icon" href="' . esc_url( $favicon ) . '" type="image/x-icon" />' . "\n";
+	// Bail if we don't have a favicon to display.
+	if ( empty( $favicon ) ) {
+		return;
 	}
+
+	echo '<link rel="Shortcut Icon" href="' . esc_url( $favicon ) . '" type="image/x-icon" />' . "\n";
 }
 
 /**
@@ -49,6 +50,7 @@ function flagship_load_favicon() {
  * header right sidebar.
  *
  * @since  1.0.0
+ * @access public
  * @param  array $args Header menu args.
  * @return array $args Modified header menu args.
  */
@@ -61,6 +63,7 @@ function flagship_header_menu_args( $args ) {
  * Wrap the header navigation menu in its own nav tags with markup API.
  *
  * @since  1.0.0
+ * @access public
  * @param  $menu Menu output.
  * @return string $menu Modified menu output.
  */
@@ -73,6 +76,7 @@ add_filter( 'get_search_form', 'flagship_get_search_form' );
  * Customize the search form to improve accessibility.
  *
  * @since  1.0.0
+ * @access public
  * @return string Search form markup.
  */
 function flagship_get_search_form() {
@@ -92,7 +96,7 @@ function flagship_get_credit_link() {
 	$uri   = $theme->get( 'AuthorURI' );
 	$name  = $theme->display( 'Author', false, true );
 
-	/* Translators: Theme name. */
+	// Translators: Theme name.
 	$title = sprintf( __( 'Purpose-Built WordPress Theme by %s', 'flagship-library' ), $name );
 
 	return sprintf( '<a class="author-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
