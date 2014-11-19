@@ -142,7 +142,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  string
 		 */
 		public function get_library_uri() {
-			return apply_filters( 'flagship_library_uri', str_replace( realpath( get_theme_root() ), get_theme_root_uri(), realpath( $this->get_library_directory() ) ) );
+			return str_replace( realpath( get_theme_root() ), get_theme_root_uri(), realpath( $this->get_library_directory() ) );
 		}
 
 		/**
@@ -173,7 +173,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Include extensions init files only when theme support has been added.
 		 *
-		 * @since   1.0.0
+		 * @since   1.1.0
 		 * @access  private
 		 * @return  void
 		 */
