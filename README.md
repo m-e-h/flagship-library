@@ -34,9 +34,7 @@ This is a simple customizer section which allows the user to choose where he or 
 
 `add_theme_support( 'breadcrumb-trail' );`
 
-In addition to adding theme support, you'll also need to make sure a breadcrumb template [like the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/sidebar/footer-widgets.php) exists in your theme. Because the footer widgets are hooked in place, you won't need to do anything else. If for some reason you'd like to change the hook location, you can do so by unhooking the default location.
-
-`remove_action( 'tha_footer_before', array( flagship_footer_widgets(), 'footer_widgets' ) );`
+In addition to adding theme support, you'll also need to make sure a breadcrumb template [like the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/menu/breadcrumbs.php) exists in your theme. If you're building a theme based on Compass, you won't need to do any of this; however, if you're using a fully custom Hybrid Core theme you'll also need to add references to your breadcrumb template in your main templates using the `hybrd_get_menu()` function.
 
 ### Footer Widgets
 
@@ -44,7 +42,9 @@ Footer widgets are a common design pattern in both our themes and many other Wor
 
 `add_theme_support( 'flagship-footer-widgets', 3 );`
 
-Once support has been added, you'll have to create a template like [the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/menu/breadcrumbs.php) to format the display of your footer widgets.
+Once support has been added, you'll have to create a template like [the one in Compass](https://github.com/FlagshipWP/compass/blob/develop/theme/sidebar/footer-widgets.php) to format the display of your footer widgets. Because the footer widgets are hooked in place, you won't need to do anything else. If for some reason you'd like to change the hook location, you can do so by unhooking the default location.
+
+`remove_action( 'tha_footer_before', array( flagship_footer_widgets(), 'footer_widgets' ) );`
 
 ### Site Logo
 
