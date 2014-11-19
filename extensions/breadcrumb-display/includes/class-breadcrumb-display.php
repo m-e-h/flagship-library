@@ -7,7 +7,7 @@
  * @copyright   Copyright (c) 2014, Flagship Software, LLC
  * @license     GPL-2.0+
  * @link        http://flagshipwp.com/
- * @since       1.0.0
+ * @since       1.1.0
  */
 
 /**
@@ -20,7 +20,7 @@ class Flagship_Breadcrumb_Display {
 	/**
 	 * Get our class up and running!
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 * @access public
 	 * @uses   Flagship_Breadcrumb_Display::$wp_hooks
 	 * @return void
@@ -32,7 +32,7 @@ class Flagship_Breadcrumb_Display {
 	/**
 	 * Register our actions and filters.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 * @access public
 	 * @uses   Flagship_Breadcrumb_Display::register_breadcrumb_settings()
 	 * @uses   add_action
@@ -45,7 +45,7 @@ class Flagship_Breadcrumb_Display {
 	/**
 	 * Register a customizer section and options for our breadcrumbs.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 * @access public
 	 * @param  object  $wp_customize
 	 * @return void
@@ -91,7 +91,7 @@ class Flagship_Breadcrumb_Display {
 	/**
 	 * An array of breadcrumb locations.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 * @access public
 	 * @return array $breadcrumbs
 	 */
@@ -128,7 +128,7 @@ class Flagship_Breadcrumb_Display {
 	/**
 	 * Sanitize our breadcrumb checkbox.
 	 *
-	 * @since  1.0.0
+	 * @since  1.1.0
 	 * @access public
 	 * @param  $input
 	 * @return int

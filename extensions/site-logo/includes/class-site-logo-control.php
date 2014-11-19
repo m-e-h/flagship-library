@@ -9,7 +9,7 @@
  * @copyright   Copyright (c) 2014, Flagship Software, LLC
  * @license     GPL-2.0+
  * @link        http://flagshipwp.com/
- * @since       1.0.0
+ * @since       1.1.0
  */
 
 /**

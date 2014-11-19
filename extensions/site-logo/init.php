@@ -14,8 +14,9 @@ add_action( 'init', 'flaghip_logo_init', 12 );
 /**
  * Activate the Flagship Logo plugin.
  *
- * @uses current_theme_supports()
- * @since 1.1.0
+ * @since  1.1.0
+ * @uses   current_theme_supports()
+ * @return void
  */
 function flaghip_logo_init() {
 	$logo_includes = trailingslashit( dirname( __FILE__ ) ) . 'includes/';
@@ -40,6 +41,7 @@ add_action( 'init', 'flagship_logo_class_loader', 13 );
  * need to hook in a little later to add our functionality. If one of the other
  * plugins is detected, we'll just return and allow them to function normally.
  *
+ * @since  1.1.0
  * @uses   Flagship_Logo::run()
  * @return object Site_Logo
  */
@@ -62,6 +64,7 @@ function flagship_logo_class_loader() {
  *
  * <?php flagship_site_logo()->has_site_logo(); ?>
  *
+ * @since  1.1.0
  * @uses   Flagship_Logo
  * @return object Site_Logo
  */
