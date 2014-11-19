@@ -153,13 +153,21 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  void
 		 */
 		public function includes() {
-			$library_dir = trailingslashit( $this->get_library_directory() );
-			require_once $library_dir . 'classes/class-search-form.php';
-			require_once $library_dir . 'functions/attr.php';
-			require_once $library_dir . 'functions/seo.php';
-			require_once $library_dir . 'functions/template-entry.php';
-			require_once $library_dir . 'functions/template-general.php';
-			require_once $library_dir . 'functions/template.php';
+			// Set up an array of library file paths which can be filtered.
+			$includes = apply_filters( 'flagship_library_includes',
+				array(
+					'classes/class-search-form.php',
+					'functions/attr.php',
+					'functions/seo.php',
+					'functions/template-entry.php',
+					'functions/template-general.php',
+					'functions/template.php',
+				)
+			);
+			// Include our library files.
+			foreach ( $includes as $include ) {
+				require_once trailingslashit( $this->get_library_directory() ) . $include;
+			}
 		}
 
 		/**
