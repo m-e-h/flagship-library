@@ -130,14 +130,11 @@ class Flagship_Breadcrumb_Display {
 	 *
 	 * @since  1.1.0
 	 * @access public
-	 * @param  $value
+	 * @param  $input
 	 * @return int
 	 */
-	public function sanitize_checkbox( $value ) {
-		if ( 1 === absint( $value ) ) {
-			return 1;
-		}
-		return 0;
+	public function sanitize_checkbox( $input ) {
+		return ( 1 === absint( $input ) ) ? 1 : 0;
 	}
 
 }
