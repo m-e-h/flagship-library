@@ -355,7 +355,7 @@ class Flagship_Site_Logo {
 	public function remove_site_logo() {
 		update_option( 'site_logo',
 			array(
-				'id'    => (int) 0,
+				'id'    => 0,
 				'sizes' => array(),
 				'url'   => '',
 			)
@@ -380,11 +380,13 @@ class Flagship_Site_Logo {
 	/**
 	 * Sanitize our header text Customizer setting.
 	 *
-	 * @param $input
-	 * @return mixed 1 if checked, empty string if not checked.
+	 * @since  1.1.0
+	 * @access public
+	 * @param  $input
+	 * @return int
 	 */
 	public function sanitize_checkbox( $input ) {
-		return ( 1 == $input ) ? 1 : '';
+		return ( 1 === absint( $input ) ) ? 1 : 0;
 	}
 
 	/**
@@ -397,14 +399,17 @@ class Flagship_Site_Logo {
 		$input['id']  = absint( $input['id'] );
 		$input['url'] = esc_url_raw( $input['url'] );
 
-		// If the new setting doesn't point to a valid attachment, just reset the whole thing.
-		if ( false == wp_get_attachment_image_src( $input['id'] ) ) {
-			$input = array(
-				'id'    => (int) 0,
-				'sizes' => array(),
-				'url'   => '',
-			);
+		// End here if we have an image to display.
+		if ( wp_get_attachment_image_src( $input['id'] ) ) {
+			return $input;
 		}
+
+		// If the new setting doesn't point to a valid attachment, reset it.
+		$input = array(
+			'id'    => 0,
+			'sizes' => array(),
+			'url'   => '',
+		);
 
 		return $input;
 	}
