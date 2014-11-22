@@ -10,7 +10,7 @@
  * @since       1.0.0
  */
 
-// Remove the default Hybrid head elements.
+// Remove unwanted default Hybrid head elements.
 remove_action( 'wp_head', 'hybrid_meta_template', 1 );
 remove_action( 'wp_head', 'hybrid_doctitle',      0 );
 
@@ -23,29 +23,9 @@ add_action( 'wp_head', 'flagship_doctitle', 0 );
  * @return void
  */
 function flagship_doctitle() {
-	printf( "<title>%s</title>\n", wp_title( '-', false ) );
-}
-
-add_filter( 'hybrid_content_template_hierarchy', 'flagship_content_template_hierarchy' );
-/**
- * Search the template paths and replace them with singular and archive versions.
- *
- * By default, the content template heirarchy forces you to add logic for single
- * and archive content within the templates themsleves. This makes the templates
- * overly complex and I would prefer to seperate them into individual files.
- *
- * @since  1.0.0
- * @access public
- * @param  array $templates
- * @return array $templates
- */
-function flagship_content_template_hierarchy( $templates ) {
-	if ( is_singular() || is_attachment() ) {
-		$templates = str_replace( 'content/', 'content/singular/', $templates );
-	} else {
-		$templates = str_replace( 'content/', 'content/archive/', $templates );
-	}
-	return $templates;
+	?>
+	<title><?php wp_title( '-' ); ?></title>
+	<?php
 }
 
 add_filter( 'hybrid_site_title', 'flagship_seo_site_title' );
