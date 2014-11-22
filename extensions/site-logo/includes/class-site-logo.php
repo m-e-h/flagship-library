@@ -405,13 +405,7 @@ class Flagship_Site_Logo {
 		}
 
 		// If the new setting doesn't point to a valid attachment, reset it.
-		$input = array(
-			'id'    => 0,
-			'sizes' => array(),
-			'url'   => '',
-		);
-
-		return $input;
+		return array( 'id' => 0, 'sizes' => array(), 'url' => '', );
 	}
 
 	/**

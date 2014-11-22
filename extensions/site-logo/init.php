@@ -42,7 +42,7 @@ add_action( 'init', 'flagship_logo_class_loader', 13 );
  * plugins is detected, we'll just return and allow them to function normally.
  *
  * @since  1.1.0
- * @uses   Flagship_Logo::run()
+ * @uses   Flagship_Site_Logo::run()
  * @return object Site_Logo
  */
 function flagship_logo_class_loader() {
@@ -65,8 +65,8 @@ function flagship_logo_class_loader() {
  * <?php flagship_site_logo()->has_site_logo(); ?>
  *
  * @since  1.1.0
- * @uses   Flagship_Logo
- * @return object Site_Logo
+ * @uses   Flagship_Site_Logo
+ * @return object Flagship_Site_Logo
  */
 function flagship_site_logo() {
 	static $extension;
