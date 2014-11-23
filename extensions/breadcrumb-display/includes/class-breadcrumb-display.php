@@ -15,56 +15,31 @@
  *
  * @package FlagshipLibrary
  */
-class Flagship_Breadcrumb_Display {
+class Flagship_Breadcrumb_Display extends Flagship_Customizer_Base {
+
+	protected $section = 'flagship_breadcrumbs';
 
 	/**
-	 * Get our class up and running!
-	 *
-	 * @since  1.1.0
-	 * @access public
-	 * @uses   Flagship_Breadcrumb_Display::$wp_hooks
-	 * @return void
-	 */
-	public function run() {
-		self::wp_hooks();
-	}
-
-	/**
-	 * Register our actions and filters.
-	 *
-	 * @since  1.1.0
-	 * @access public
-	 * @uses   Flagship_Breadcrumb_Display::register_breadcrumb_settings()
-	 * @uses   add_action
-	 * @return void
-	 */
-	private function wp_hooks() {
-		add_action( 'customize_register', array( $this, 'register_breadcrumb_settings' ) );
-	}
-
-	/**
-	 * Register a customizer section and options for our breadcrumbs.
+	 * Register our customizer breadcrumb options for the parent class to load.
 	 *
 	 * @since  1.1.0
 	 * @access public
 	 * @param  object  $wp_customize
 	 * @return void
 	 */
-	public function register_breadcrumb_settings( $wp_customize ) {
-
-		$capability = 'edit_theme_options';
-		$section    = 'flagship_breadcrumbs';
+	public function register( $wp_customize ) {
 
 		$wp_customize->add_section(
-			$section,
+			$this->section,
 			array(
 				'title'       => __( 'Breadcrumbs', 'flagship-library' ),
 				'description' => __( 'Choose where you would like breadcrumbs to display.', 'flagship-library' ),
 				'priority'    => 110,
+				'capability'  => $this->capability,
 			)
 		);
 
-		$counter = 20;
+		$priority = 10;
 
 		foreach ( $this->get_breadcrumb_options() as $breadcrumb => $setting ) {
 
@@ -80,9 +55,9 @@ class Flagship_Breadcrumb_Display {
 				$breadcrumb,
 				array(
 					'label'    => $setting['label'],
-					'section'  => $section,
+					'section'  => $this->section,
 					'type'     => 'checkbox',
-					'priority' => $counter++,
+					'priority' => $priority++,
 				)
 			);
 		}
@@ -123,18 +98,6 @@ class Flagship_Breadcrumb_Display {
 			),
 		);
 		return apply_filters( 'flagship_get_breadcrumb_options', $breadcrumbs );
-	}
-
-	/**
-	 * Sanitize our breadcrumb checkbox.
-	 *
-	 * @since  1.1.0
-	 * @access public
-	 * @param  $input
-	 * @return int
-	 */
-	public function sanitize_checkbox( $input ) {
-		return ( 1 === absint( $input ) ) ? 1 : 0;
 	}
 
 }
