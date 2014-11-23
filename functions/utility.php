@@ -11,6 +11,28 @@
  */
 
 /**
+ * A helper function to simplify the process of building complicated styles
+ * based on user input within the WordPress customizer.
+ *
+ * Example:
+ *
+ * <?php flagship_style_builder()->add( $data ); ?>
+ *
+ * @since   1.1.1
+ * @access  public
+ * @uses    Flagship_Style_Builder
+ * @see     /classes/class-style-builder.php
+ * @return  object Flagship_Style_Builder
+ */
+function flagship_style_builder() {
+	static $builder;
+	if ( null === $builder ) {
+		$builder = new Flagship_Style_Builder();
+	}
+	return $builder;
+}
+
+/**
  * Display our breadcrumbs based on selections made in the WordPress customizer.
  *
  * @since  1.1.0
