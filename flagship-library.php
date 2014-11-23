@@ -168,12 +168,15 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			// Set up an array of library file paths which can be filtered.
 			$includes = apply_filters( 'flagship_library_includes',
 				array(
+					'classes/class-customizer-base.php',
 					'classes/class-search-form.php',
+					'classes/class-style-builder.php',
 					'functions/attr.php',
 					'functions/seo.php',
 					'functions/template-entry.php',
 					'functions/template-general.php',
 					'functions/template.php',
+					'functions/utility.php',
 				)
 			);
 			// Include our library files.
