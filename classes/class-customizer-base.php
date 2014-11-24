@@ -28,12 +28,20 @@
 abstract class Flagship_Customizer_Base {
 
 	/**
-	 * An empty array for holding option values for multi-select settings.
+	 * An array of choices used for sanitizing multi-select fields.
 	 *
 	 * @since 1.2.0
 	 * @var   string
 	 */
-	public $options = array();
+	public $choices = array();
+
+	/**
+	 * An array of defaults used for sanitizing multi-select fields.
+	 *
+	 * @since 1.2.0
+	 * @var   string
+	 */
+	public $defaults = array();
 
 	/**
 	 * A default capability required for customizer options.
@@ -175,8 +183,8 @@ abstract class Flagship_Customizer_Base {
 	 */
 	public function get_default( $setting ) {
 		$default = '';
-		if ( isset( $this->options[ $setting ]['default'] ) ) {
-			$default = $this->options[ $setting ]['default'];
+		if ( isset( $this->defaults[ $setting ] ) ) {
+			$default = $this->defaults[ $setting ];
 		}
 		return $default;
 	}
@@ -191,8 +199,8 @@ abstract class Flagship_Customizer_Base {
 	 */
 	public function get_choices( $setting ) {
 		$choices = array();
-		if ( isset( $this->options[ $setting ]['choices'] ) ) {
-			$choices = (array) $this->options[ $setting ]['choices'];
+		if ( isset( $this->choices[ $setting ] ) ) {
+			$choices = (array) $this->choices[ $setting ];
 		}
 		return $choices;
 	}
