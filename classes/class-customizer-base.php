@@ -1,9 +1,12 @@
 <?php
 /**
+ * Abstract Flagship Customizer Base Class
+ *
  * Rather than writing basic sanitization and registration methods every time we
  * want to hook into the WordPress customizer, we should try to reuse code as
- * much as possible. This abstract class allows us to add any type of customizer
- * setting we like and reference our existing methods within the child class.
+ * much as possible. This abstract class allows us to add and sanitize any type
+ * of customizer setting we like and reference our existing methods within the
+ * child class.
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
