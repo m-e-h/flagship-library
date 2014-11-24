@@ -10,7 +10,7 @@
  * @copyright   Copyright (c) 2014, Flagship Software, LLC
  * @license     GPL-2.0+
  * @link        http://flagshipwp.com/
- * @since       1.1.1
+ * @since       1.2.0
  */
 
 /**
@@ -19,15 +19,23 @@
  * An abstract class to provide basic helper methods to use when registering new
  * customizer sections within a theme.
  *
- * @since   1.1.1
+ * @since   1.2.0
  * @version 1.0.0
  */
 abstract class Flagship_Customizer_Base {
 
 	/**
+	 * An empty array for holding option values for multi-select settings.
+	 *
+	 * @since 1.2.0
+	 * @var   string
+	 */
+	public $options = array();
+
+	/**
 	 * A default capability required for customizer options.
 	 *
-	 * @since 1.1.1
+	 * @since 1.2.0
 	 * @var   string
 	 */
 	protected $capability = 'edit_theme_options';
@@ -35,7 +43,7 @@ abstract class Flagship_Customizer_Base {
 	/**
 	 * Get our class up and running!
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @access public
 	 * @uses   Flagship_Customizer_Base::$customizer_hooks
 	 * @return void
@@ -47,7 +55,7 @@ abstract class Flagship_Customizer_Base {
 	/**
 	 * Define defaults, call the `register` method, add css to head.
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @access public
 	 * @return void
 	 */
@@ -56,7 +64,7 @@ abstract class Flagship_Customizer_Base {
 		if ( ! method_exists( $this, 'register' ) ) {
 			_doing_it_wrong(
 				'Flagship_Customizer_Base',
-				__( 'When extending Flagship_Customizer_Base, you must create a register method.', 'flagship-library' )
+				__( 'When extending Flagship_Customizer_Base, you must create a register method.', 'exposure' )
 			);
 		}
 		// Register our customizer sections.
@@ -71,7 +79,7 @@ abstract class Flagship_Customizer_Base {
 	/**
 	 * Sanitize a string to allow only tags in the allowedtags array.
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @param  string $string The unsanitized string.
 	 * @return string The sanitized string.
 	 */
@@ -83,7 +91,7 @@ abstract class Flagship_Customizer_Base {
 	/**
 	 * Sanitize a checkbox to only allow 0 or 1
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @access public
 	 * @param  $input
 	 * @return int
@@ -93,32 +101,9 @@ abstract class Flagship_Customizer_Base {
 	}
 
 	/**
-	 * Sanitize a value from a list of allowed values.
-	 *
-	 * @since  1.1.1
-	 * @access public
-	 * @param  mixed $value The value to sanitize.
-	 * @param  mixed $setting The setting for which the sanitizing is occurring.
-	 * @return mixed The sanitized value.
-	 */
-	public function sanitize_choices( $choices, $setting, $default = '' ) {
-		if ( is_object( $setting ) ) {
-			$setting = $setting->id;
-		}
-
-		$allowed_choices = array_keys( $choices );
-
-		if ( ! in_array( $value, $allowed_choices ) ) {
-			$value = $default;
-		}
-
-		return $value;
-	}
-
-	/**
 	 * Sanitize the url of uploaded media.
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @access public
 	 * @param  string $value The url to sanitize
 	 * @return string $output The sanitized url.
@@ -140,7 +125,7 @@ abstract class Flagship_Customizer_Base {
 	 * Returns either '', a 3 or 6 digit hex color (with #), or null.
 	 * For sanitizing values without a #, see sanitize_hex_color_no_hash().
 	 *
-	 * @since  1.1.1
+	 * @since  1.2.0
 	 * @access public
 	 * @param  string $color
 	 * @return string|null
@@ -156,6 +141,57 @@ abstract class Flagship_Customizer_Base {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Sanitize a value from a list of allowed values.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 * @param  mixed $value The value to sanitize.
+	 * @param  mixed $setting The setting for which the sanitizing is occurring.
+	 * @return mixed The sanitized value.
+	 */
+	public function sanitize_choices( $value, $setting ) {
+		if ( is_object( $setting ) ) {
+			$setting = $setting->id;
+		}
+		if ( ! in_array( $value, array_keys( $this->get_choices( $setting ) ) ) ) {
+			$value = $this->get_default( $setting );
+		}
+		return $value;
+	}
+
+	/**
+	 * Helper function to return defaults as a string.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 * @param  string
+	 * @return string $default
+	 */
+	public function get_default( $setting ) {
+		$default = '';
+		if ( isset( $this->options[ $setting ]['default'] ) ) {
+			$default = $this->options[ $setting ]['default'];
+		}
+		return $default;
+	}
+
+	/**
+	 * Helper function to return choices as an array.
+	 *
+	 * @since  1.2.0
+	 * @access public
+	 * @param  string
+	 * @return array $default
+	 */
+	public function get_choices( $setting ) {
+		$choices = array();
+		if ( isset( $this->options[ $setting ]['choices'] ) ) {
+			$choices = (array) $this->options[ $setting ]['choices'];
+		}
+		return $choices;
 	}
 
 }
