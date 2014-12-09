@@ -168,7 +168,7 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 */
 	public function head_text_styles() {
 		// Bail if our theme supports custom headers or  header text isn't hidden.
-		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 0 ) ) {
+		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 1 ) ) {
 			return;
 		}
 
