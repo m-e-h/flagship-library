@@ -17,7 +17,7 @@
  *
  * @package FlagshipLibrary
  */
-class Flagship_Site_Logo {
+class Flagship_Site_Logo extends Flagship_Customizer_Base {
 
 	/**
 	 * Stores our current logo settings.
@@ -39,6 +39,7 @@ class Flagship_Site_Logo {
 	 * @return object Flagship_Site_Logo
 	 */
 	public function run() {
+		parent::customizer_hooks();
 		self::wp_hooks();
 	}
 
@@ -46,21 +47,18 @@ class Flagship_Site_Logo {
 	 * Register our actions and filters.
 	 *
 	 * @uses Flagship_Site_Logo::head_text_styles()
-	 * @uses Flagship_Site_Logo::customize_register()
-	 * @uses Flagship_Site_Logo::preview_enqueue()
 	 * @uses Flagship_Site_Logo::body_classes()
 	 * @uses Flagship_Site_Logo::media_manager_image_sizes()
 	 * @uses add_action
 	 * @uses add_filter
 	 */
-	private function wp_hooks() {
+	protected function wp_hooks() {
 		add_action( 'wp_head',                 array( $this, 'head_text_styles' ) );
-		add_action( 'customize_register',      array( $this, 'customize_register' ) );
-		add_action( 'customize_preview_init',  array( $this, 'preview_enqueue' ) );
 		add_action( 'delete_attachment',       array( $this, 'reset_on_attachment_delete' ) );
 		add_filter( 'body_class',              array( $this, 'body_classes' ) );
 		add_filter( 'image_size_names_choose', array( $this, 'media_manager_image_sizes' ) );
 		add_filter( 'display_media_states',    array( $this, 'add_media_state' ) );
+		add_filter( 'upload_mimes',            array( $this, 'add_svg_mime_type' ) );
 	}
 
 	/**
@@ -73,7 +71,7 @@ class Flagship_Site_Logo {
 	 * @uses WP_Customize_Manager::add_control()
 	 * @uses Flagship_Site_Logo::sanitize_checkbox()
 	 */
-	public function customize_register( $wp_customize ) {
+	public function register( $wp_customize ) {
 
 		//Update the Customizer section title for discoverability.
 		$wp_customize->get_section( 'title_tagline' )->title = __( 'Site Title, Tagline, and Logo', 'flagship-library' );
@@ -107,7 +105,7 @@ class Flagship_Site_Logo {
 		$wp_customize->add_setting(
 			'site_logo',
 			array(
-				'capability' => 'manage_options',
+				'capability' => $this->capability,
 				'default'    => array(
 					'id'     => 0,
 					'sizes'  => array(),
@@ -142,19 +140,19 @@ class Flagship_Site_Logo {
 	 * @uses Flagship_Site_Logo::header_text_classes()
 	 * @uses wp_localize_script()
 	 */
-	public function preview_enqueue() {
+	public function scripts() {
 		$assets_uri = trailingslashit( flagship_library()->get_library_uri() ) . 'assets/';
 
 		wp_enqueue_script(
 			'site-logo-preview',
-			$assets_uri . 'js/site-logo/preview.js',
+			esc_url( $assets_uri ) . 'js/site-logo/preview.js',
 			array( 'media-views' ),
 			'',
 			true
 		);
 		wp_enqueue_script(
 			'site-logo-header-text',
-			$assets_uri . 'js/site-logo/header-text.js',
+			esc_url( $assets_uri ) . 'js/site-logo/header-text.js',
 			array( 'media-views' ),
 			'',
 			true
@@ -171,7 +169,7 @@ class Flagship_Site_Logo {
 	 */
 	public function head_text_styles() {
 		// Bail if our theme supports custom headers or  header text isn't hidden.
-		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 0 ) ) {
+		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 1 ) ) {
 			return;
 		}
 
@@ -189,22 +187,32 @@ class Flagship_Site_Logo {
 	}
 
 	/**
-	 * Determine image size to use for the logo.
+	 * Reset the site logo if the current logo is deleted in the media manager.
 	 *
-	 * @uses get_theme_support()
-	 * @return string Size specified in add_theme_support declaration, or 'thumbnail' default
+	 * @param int $site_id
+	 * @uses Flagship_Site_Logo::remove_site_logo()
 	 */
-	public function theme_size() {
-		$args        = get_theme_support( 'site-logo' );
-		$valid_sizes = get_intermediate_image_sizes();
+	public function reset_on_attachment_delete( $post_id ) {
+		// Do nothing if the logo id doesn't match the post id.
+		if ( $this->logo['id'] !== $post_id ) {
+			return;
+		}
+		$this->remove_site_logo();
+	}
 
-		// Add 'full' to the list of accepted values.
-		$valid_sizes[] = 'full';
+	/**
+	 * Adds custom classes to the array of body classes.
+	 *
+	 * @uses Flagship_Site_Logo::has_site_logo()
+	 * @return array Array of <body> classes
+	 */
+	public function body_classes( $classes ) {
+		// Add a class if a Site Logo is active
+		if ( $this->has_site_logo() ) {
+			$classes[] = 'has-site-logo';
+		}
 
-		// If the size declared in add_theme_support is valid, use it; otherwise, just go with 'thumbnail'.
-		$size = ( isset( $args[0]['size'] ) && in_array( $args[0]['size'], $valid_sizes ) ) ? $args[0]['size'] : 'thumbnail';
-
-		return $size;
+		return $classes;
 	}
 
 	/**
@@ -252,17 +260,28 @@ class Flagship_Site_Logo {
 	}
 
 	/**
-	 * Reset the site logo if the current logo is deleted in the media manager.
+	 * Determine if a site logo is assigned or not.
 	 *
-	 * @param int $site_id
-	 * @uses Flagship_Site_Logo::remove_site_logo()
+	 * @uses Flagship_Logo::$logo
+	 * @return boolean True if there is an active logo, false otherwise
 	 */
-	public function reset_on_attachment_delete( $post_id ) {
-		// Do nothing if the logo id doesn't match the post id.
-		if ( $this->logo['id'] !== $post_id ) {
-			return;
-		}
-		$this->remove_site_logo();
+	public function has_site_logo() {
+		return ( isset( $this->logo['id'] ) && 0 !== $this->logo['id'] ) ? true : false;
+	}
+
+	/**
+	 * Reset the site logo option to zero (empty).
+	 *
+	 * @uses update_option()
+	 */
+	public function remove_site_logo() {
+		update_option( 'site_logo',
+			array(
+				'id'    => 0,
+				'sizes' => array(),
+				'url'   => '',
+			)
+		);
 	}
 
 	/**
@@ -288,16 +307,6 @@ class Flagship_Site_Logo {
 		}
 
 		return esc_url_raw( set_url_scheme( $logo['url'] ) );
-	}
-
-	/**
-	 * Determine if a site logo is assigned or not.
-	 *
-	 * @uses Flagship_Logo::$logo
-	 * @return boolean True if there is an active logo, false otherwise
-	 */
-	public function has_site_logo() {
-		return ( isset( $this->logo['id'] ) && 0 !== $this->logo['id'] ) ? true : false;
 	}
 
 	/**
@@ -348,45 +357,22 @@ class Flagship_Site_Logo {
 	}
 
 	/**
-	 * Reset the site logo option to zero (empty).
+	 * Determine image size to use for the logo.
 	 *
-	 * @uses update_option()
+	 * @uses get_theme_support()
+	 * @return string Size specified in add_theme_support declaration, or 'thumbnail' default
 	 */
-	public function remove_site_logo() {
-		update_option( 'site_logo',
-			array(
-				'id'    => 0,
-				'sizes' => array(),
-				'url'   => '',
-			)
-		);
-	}
+	public function theme_size() {
+		$args        = get_theme_support( 'site-logo' );
+		$valid_sizes = get_intermediate_image_sizes();
 
-	/**
-	 * Adds custom classes to the array of body classes.
-	 *
-	 * @uses Flagship_Site_Logo::has_site_logo()
-	 * @return array Array of <body> classes
-	 */
-	public function body_classes( $classes ) {
-		// Add a class if a Site Logo is active
-		if ( $this->has_site_logo() ) {
-			$classes[] = 'has-site-logo';
-		}
+		// Add 'full' to the list of accepted values.
+		$valid_sizes[] = 'full';
 
-		return $classes;
-	}
+		// If the size declared in add_theme_support is valid, use it; otherwise, just go with 'thumbnail'.
+		$size = ( isset( $args[0]['size'] ) && in_array( $args[0]['size'], $valid_sizes ) ) ? $args[0]['size'] : 'thumbnail';
 
-	/**
-	 * Sanitize our header text Customizer setting.
-	 *
-	 * @since  1.1.0
-	 * @access public
-	 * @param  $input
-	 * @return int
-	 */
-	public function sanitize_checkbox( $input ) {
-		return ( 1 === absint( $input ) ) ? 1 : 0;
+		return $size;
 	}
 
 	/**
@@ -409,13 +395,17 @@ class Flagship_Site_Logo {
 	}
 
 	/**
-	 * Sanitize the string of classes used for header text.
-	 * Limit to A-Z,a-z,0-9,(space),(comma),_,-
+	 * Enable support for administrators to add SVG uploads.
 	 *
-	 * @return string Sanitized string of CSS classes.
+	 * @param  $mimes array
+	 * @return $mimes array modified mimes
 	 */
-	function sanitize_header_text_classes( $classes ) {
-		return preg_replace( '/[^A-Za-z0-9\,\ ._-]/', '', $classes );
+	function add_svg_mime_type( $mimes ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return $mimes;
+		}
+		$mimes['svg'] = 'image/svg+xml';
+		return $mimes;
 	}
 
 }

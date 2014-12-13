@@ -15,7 +15,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 	/**
 	 * Class for common Flagship theme functionality.
 	 *
-	 * @version 1.1.0
+	 * @version 1.2.0
 	 */
 	class Flagship_Library {
 
@@ -25,7 +25,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @since 1.1.0
 		 * @type  string
 		 */
-		protected $version = '1.1.0';
+		protected $version = '1.2.0';
 
 		/**
 		 * Prefix to prevent conflicts.
@@ -145,12 +145,39 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Return the correct path to the flagship library directory.
 		 *
-		 * @since   1.1.0
-		 * @access  public
-		 * @return  string
+		 * Because we don't know where the library is located, we need to
+		 * generate a URI based on the library directory path. In order to do
+		 * this, we are replacing the theme root directory portion of the
+		 * library directory with the theme root URI.
+		 *
+		 * @since  1.1.0
+		 * @access public
+		 * @uses   get_theme_root()
+		 * @uses   get_theme_root_uri()
+		 * @uses   Flagship_Library::normalize_path()
+		 * @uses   Flagship_Library::get_library_directory()
+		 * @return string
 		 */
 		public function get_library_uri() {
-			return str_replace( realpath( get_theme_root() ), get_theme_root_uri(), realpath( $this->get_library_directory() ) );
+			$theme_root  = $this->normalize_path( get_theme_root() );
+			$library_dir = $this->normalize_path( $this->get_library_directory() );
+			return str_replace( $theme_root, get_theme_root_uri(), $library_dir );
+		}
+
+		/**
+		 * Fix asset directory path on Windows installations.
+		 *
+		 * In order to get the absolute uri of our library directory without
+		 * hard-coding it, we need to use some WordPress functions which return
+		 * server paths. Unfortunately, on Windows these result in unexpected
+		 * results due to a difference in the way paths are formatted.
+		 *
+		 * @since   1.2.0
+		 * @access  private
+		 * @return  void
+		 */
+		private function normalize_path( $path ) {
+			return str_replace( '\\', '/', $path );
 		}
 
 		/**
@@ -168,12 +195,15 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			// Set up an array of library file paths which can be filtered.
 			$includes = apply_filters( 'flagship_library_includes',
 				array(
+					'classes/class-customizer-base.php',
 					'classes/class-search-form.php',
+					'classes/class-style-builder.php',
 					'functions/attr.php',
 					'functions/seo.php',
 					'functions/template-entry.php',
 					'functions/template-general.php',
 					'functions/template.php',
+					'functions/utility.php',
 				)
 			);
 			// Include our library files.
@@ -208,7 +238,7 @@ if ( ! function_exists( 'flagship_library' ) ) {
 	 *
 	 * <?php flagship_library()->is_customizer_preview(); ?>
 	 *
-	 * @version 1.1.0
+	 * @version 1.2.0
 	 * @return  object Flagship_Library
 	 */
 	function flagship_library() {
