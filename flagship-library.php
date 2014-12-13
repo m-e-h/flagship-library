@@ -150,7 +150,23 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  string
 		 */
 		public function get_library_uri() {
-			return str_replace( realpath( get_theme_root() ), get_theme_root_uri(), realpath( $this->get_library_directory() ) );
+			return str_replace( $this->normalize_path( get_theme_root() ), get_theme_root_uri(), $this->normalize_path( $this->get_library_directory() ) );
+		}
+
+		/**
+		 * Fix asset directory path on Windows installations.
+		 *
+		 * In order to get the absolute uri of our library directory without
+		 * hard-coding it, we need to use some WordPress functions which return
+		 * server paths. Unfortunately, on Windows these result in unexpected
+		 * results due to a difference in the way paths are formatted.
+		 *
+		 * @since   1.2.0
+		 * @access  private
+		 * @return  void
+		 */
+		private function normalize_path( $path ) {
+			return str_replace( '\\', '/', $path );
 		}
 
 		/**
