@@ -71,11 +71,11 @@ class Flagship_Site_Logo_Image_Control extends WP_Customize_Control {
 		// Enqueue our control script and styles.
 		wp_enqueue_style(
 			'site-logo-control',
-			$assets_uri . 'css/site-logo/control.css'
+			esc_url( $assets_uri ) . 'css/site-logo/control.css'
 		);
 		wp_enqueue_script(
 			'site-logo-control',
-			$assets_uri . 'js/site-logo/control.js',
+			esc_url( $assets_uri ) . 'js/site-logo/control.js',
 			array( 'media-views', 'customize-controls', 'underscore' ),
 			'',
 			true

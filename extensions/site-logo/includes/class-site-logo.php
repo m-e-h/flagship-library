@@ -144,14 +144,14 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 
 		wp_enqueue_script(
 			'site-logo-preview',
-			$assets_uri . 'js/site-logo/preview.js',
+			esc_url( $assets_uri ) . 'js/site-logo/preview.js',
 			array( 'media-views' ),
 			'',
 			true
 		);
 		wp_enqueue_script(
 			'site-logo-header-text',
-			$assets_uri . 'js/site-logo/header-text.js',
+			esc_url( $assets_uri ) . 'js/site-logo/header-text.js',
 			array( 'media-views' ),
 			'',
 			true
