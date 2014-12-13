@@ -145,12 +145,23 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		/**
 		 * Return the correct path to the flagship library directory.
 		 *
-		 * @since   1.1.0
-		 * @access  public
-		 * @return  string
+		 * Because we don't know where the library is located, we need to
+		 * generate a URI based on the library directory path. In order to do
+		 * this, we are replacing the theme root directory portion of the
+		 * library directory with the theme root URI.
+		 *
+		 * @since  1.1.0
+		 * @access public
+		 * @uses   get_theme_root()
+		 * @uses   get_theme_root_uri()
+		 * @uses   Flagship_Library::normalize_path()
+		 * @uses   Flagship_Library::get_library_directory()
+		 * @return string
 		 */
 		public function get_library_uri() {
-			return str_replace( $this->normalize_path( get_theme_root() ), get_theme_root_uri(), $this->normalize_path( $this->get_library_directory() ) );
+			$theme_root  = $this->normalize_path( get_theme_root() );
+			$library_dir = $this->normalize_path( $this->get_library_directory() );
+			return str_replace( $theme_root, get_theme_root_uri(), $library_dir );
 		}
 
 		/**
