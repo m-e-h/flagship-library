@@ -2,7 +2,7 @@
 
 ## 1.2.1
 
-Fixed an incorrect textomain that made it in during development.
+Fixed an incorrect textdomain that made it in during development.
 
 ## 1.2.0
 
