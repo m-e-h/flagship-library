@@ -1,5 +1,9 @@
 # Changelog for Flagship Library
 
+## 1.2.1
+
+Fixed an incorrect textomain that made it in during development.
+
 ## 1.2.0
 
 This release adds a few helper classes for working with the WordPress customizer and makes some under-the-hook improvements to the existing extensions and classes. The following classes were added:
