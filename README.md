@@ -23,6 +23,8 @@ Currently, the main features include:
 - A simple favicon loader
 - A class to make the WordPress search form a11y compliant
 - Template helper functions for displaying entry meta data
+- Helper class for registering WordPress customizer options
+- Helper class for building CSS output based on customizer input
 
 ## Extensions
 
