@@ -9,7 +9,7 @@ __License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)
 
 There are a lot of things that go into a well-crafted theme. You need to make sure everything is SEO-friendly, you have to format commonly re-used bits of markup, and now more than ever you need to make it easy for your users to interact with your theme using the WordPress customizer.
 
-The Flagship Library is a project designed to help with these things by delivering a modular, extensible library of reusable theme code. The primary reason it exists is for use in our [premium WordPress themes](http://flagshipwp.com), but we've released it open source for anyone else who would like to use or contribute to it.
+The Flagship Library is a project designed to help with these things by delivering a modular, extensible library of reusable theme code. The primary reason it exists is for use in our [premium WordPress themes](https://flagshipwp.com), but we've released it open source for anyone else who would like to use or contribute to it.
 
 ## Basic Features
 
