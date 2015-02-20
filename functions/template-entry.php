@@ -4,7 +4,7 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
  * @link        https://flagshipwp.com/
  * @since       1.0.0
@@ -15,7 +15,7 @@
  *
  * @since  1.1.0
  * @access public
- * @param  array $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_author( $args = array() ) {
@@ -30,7 +30,7 @@ function flagship_entry_author( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  $args array
  * @return string
  */
 function flagship_get_entry_author( $args = array() ) {
@@ -54,7 +54,7 @@ function flagship_get_entry_author( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_published( $args = array() ) {
@@ -67,7 +67,7 @@ function flagship_entry_published( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array $args
+ * @param  $args array
  * @return string
  */
 function flagship_get_entry_published( $args = array() ) {
@@ -98,7 +98,7 @@ function flagship_get_entry_published( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_comments_link( $args = array() ) {
@@ -120,7 +120,7 @@ function flagship_entry_comments_link( $args = array() ) {
  * Output passes through 'flagship_get_entry_comments_link' filter before returning.
  *
  * @since  1.1.0
- * @param  array $args Empty array if no arguments.
+ * @param  $args array Empty array if no arguments.
  * @return string output
  */
 function flagship_get_entry_comments_link( $args = array() ) {
