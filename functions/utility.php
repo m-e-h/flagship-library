@@ -65,7 +65,7 @@ function flagship_display_breadcrumbs() {
 	// Loop through our theme mods to see if we have a match.
 	foreach ( $breadcrumb_mods as $mod => $tag ) {
 		// Return true if we find an enabled theme mod within the correct section.
-		if ( absint( get_theme_mod( $mod, 0 ) ) === 1 && $tag === true ) {
+		if ( 1 === absint( get_theme_mod( $mod, 0 ) ) && true === $tag ) {
 			return true;
 		}
 	}
