@@ -50,11 +50,11 @@ function flagship_get_entry_author( $args = array() ) {
 }
 
 /**
- * Outputs a post's pulbished date.
+ * Outputs a post's published date.
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  array $args
  * @return void
  */
 function flagship_entry_published( $args = array() ) {
@@ -62,15 +62,12 @@ function flagship_entry_published( $args = array() ) {
 }
 
 /**
- * Function for getting the current post's author in The Loop and linking to t
- * he author archive page. This function was created because core WordPress does
- * not have template tags with proper translation and RTL support for this.
- * An equivalent getter function for `the_author_posts_link()` would instantly
- * solve this issue.
+ * Helper function for getting a post's published date and formatting it to be
+ * displayed in a template.
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  array $args
  * @return string
  */
 function flagship_get_entry_published( $args = array() ) {
@@ -81,6 +78,8 @@ function flagship_get_entry_published( $args = array() ) {
 		array(
 			'before' => '',
 			'after'  => '',
+			'attr'   => 'entry-published',
+			'date'   => get_the_date(),
 			'wrap'   => '<time %s>%s</time>',
 		)
 	);
@@ -88,7 +87,7 @@ function flagship_get_entry_published( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	$output .= $args['before'];
-	$output .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-published' ), get_the_date() );
+	$output .= sprintf( $args['wrap'], hybrid_get_attr( $args['attr'] ), $args['date'] );
 	$output .= $args['after'];
 
 	return apply_filters( 'flagship_entry_published', $output, $args );
@@ -99,7 +98,7 @@ function flagship_get_entry_published( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  array $args
  * @return void
  */
 function flagship_entry_comments_link( $args = array() ) {
