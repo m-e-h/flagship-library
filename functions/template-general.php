@@ -85,6 +85,125 @@ function flagship_get_search_form() {
 }
 
 /**
+ * Outputs a navigation element for a singular entry.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return void
+ */
+function flagship_singular_nav( $args = array() ) {
+	echo flagship_get_singular_nav( $args );
+}
+
+/**
+ * Helper function to build a next and previous posts navigation element on
+ * single entries. This takes care of all the annoying formatting which usually
+ * would need to be done within a template.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return string
+ */
+function flagship_get_singular_nav( $args = array() ) {
+	$defaults = apply_filters( 'flagship_singular_nav_defaults',
+		array(
+			'post_types'     => array( 'post', ),
+			'prev_format'    => '<span class="nav-previous">%link</span>',
+			'next_format'    => '<span class="nav-next">%link</span>',
+			'prev_link'      => __( 'Previous Post', 'flagship' ),
+			'next_link'      => __( 'Next Post', 'flagship' ),
+			'in_same_term'   => false,
+			'excluded_terms' => '',
+			'taxonomy'       => 'category',
+		)
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	if ( ! is_singular( $args['post_types'] ) ) {
+		return;
+	}
+
+	$output = '';
+
+	$output .= '<nav ' . hybrid_get_attr( 'nav', 'single' ) . '>';
+
+	// Seriously, WordPress?
+	ob_start();
+	previous_post_link( $args['prev_format'], $args['prev_link'], $args['in_same_term'], $args['excluded_terms'], $args['taxonomy'] );
+	next_post_link( $args['next_format'], $args['next_link'], $args['in_same_term'], $args['excluded_terms'], $args['taxonomy']  );
+	$output .= ob_get_clean();
+
+	$output .= '</nav><!-- .nav-single -->';
+
+	return apply_filters( 'flagship_singular_nav', $output, $args );
+}
+
+/**
+ * Outputs a navigation element for a loop.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return void
+ */
+function flagship_loop_nav( $args = array() ) {
+	echo flagship_get_loop_nav( $args );
+}
+
+/**
+ * Helper function to build a newer/older or paginated navigation element within
+ * a loop of multiple entries. This takes care of all the annoying formatting 
+ * which usually would need to be done within a template. This defaults to a
+ * pagination format unless the site is using a version of WordPress older than
+ * 4.1. For older sites, we fall back to the next and previous post links by
+ * default.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return string
+ */
+function flagship_get_loop_nav( $args = array() ) {
+	// Return early if we're on a singular post.
+	if ( is_singular() ) {
+		return;
+	}
+
+	$defaults = apply_filters( 'flagship_loop_nav_defaults',
+		array(
+			'format'         => 'pagination',
+			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship' ) ),
+			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship' ) ),
+			'prev_link_text' => __( 'Newer Posts', 'flagship' ),
+			'next_link_text' => __( 'Older Posts', 'flagship' ),
+		)
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$output = '';
+
+	$output .= '<nav ' . hybrid_get_attr( 'nav', 'archive' ) . '>';
+	$output .= sprintf( '<span class="nav-previous">%s</span>', get_previous_posts_link( $args['prev_link_text'] ) );
+	$output .= sprintf( '<span class="nav-next">%s</span>', get_next_posts_link( $args['next_link_text'] ) );
+	$output .= '</nav><!-- .nav-archive -->';
+
+	if ( function_exists( 'the_posts_pagination' ) && 'pagination' === $args['format'] ) {
+		$output = get_the_posts_pagination(
+			array(
+				'prev_text' => $args['prev_text'],
+				'next_text' => $args['next_text'],
+			)
+		);
+	}
+
+	return apply_filters( 'flagship_loop_nav', $output, $args );
+}
+
+/**
  * Returns a formatted theme credit link.
  *
  * @since  1.1.0
