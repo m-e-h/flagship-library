@@ -132,8 +132,20 @@ function flagship_get_singular_nav( $args = array() ) {
 
 	// Seriously, WordPress?
 	ob_start();
-	previous_post_link( $args['prev_format'], $args['prev_link'], $args['in_same_term'], $args['excluded_terms'], $args['taxonomy'] );
-	next_post_link( $args['next_format'], $args['next_link'], $args['in_same_term'], $args['excluded_terms'], $args['taxonomy']  );
+	previous_post_link(
+		$args['prev_format'],
+		$args['prev_link'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		$args['taxonomy']
+	);
+	next_post_link(
+		$args['next_format'],
+		$args['next_link'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		$args['taxonomy']
+	);
 	$output .= ob_get_clean();
 
 	$output .= '</nav><!-- .nav-single -->';
@@ -155,7 +167,7 @@ function flagship_loop_nav( $args = array() ) {
 
 /**
  * Helper function to build a newer/older or paginated navigation element within
- * a loop of multiple entries. This takes care of all the annoying formatting 
+ * a loop of multiple entries. This takes care of all the annoying formatting
  * which usually would need to be done within a template. This defaults to a
  * pagination format unless the site is using a version of WordPress older than
  * 4.1. For older sites, we fall back to the next and previous post links by

@@ -34,7 +34,6 @@ function flagship_entry_author( $args = array() ) {
  * @return string
  */
 function flagship_get_entry_author( $args = array() ) {
-
 	$defaults = apply_filters( 'flagship_entry_author_defaults',
 		array(
 			'text'   => '%s',
@@ -71,7 +70,6 @@ function flagship_entry_published( $args = array() ) {
  * @return string
  */
 function flagship_get_entry_published( $args = array() ) {
-
 	$output = '';
 
 	$defaults = apply_filters( 'flagship_entry_published_defaults',
@@ -124,7 +122,6 @@ function flagship_entry_comments_link( $args = array() ) {
  * @return string output
  */
 function flagship_get_entry_comments_link( $args = array() ) {
-
 	$defaults = apply_filters( 'flagship_entry_comments_link_defaults',
 		array(
 			'after'       => '',
@@ -151,5 +148,4 @@ function flagship_get_entry_comments_link( $args = array() ) {
 	$output = '<span class="entry-comments-link">' . $args['before'] . $comments . $args['after'] . '</span>';
 
 	return apply_filters( 'flagship_entry_comments_link', $output, $args );
-
 }
