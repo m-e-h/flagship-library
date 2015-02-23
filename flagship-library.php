@@ -25,7 +25,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @since 1.1.0
 		 * @type  string
 		 */
-		protected $version = '1.2.1';
+		protected $version = '1.3.0';
 
 		/**
 		 * Prefix to prevent conflicts.
