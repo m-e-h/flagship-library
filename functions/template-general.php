@@ -179,8 +179,9 @@ function flagship_loop_nav( $args = array() ) {
  * @return string
  */
 function flagship_get_loop_nav( $args = array() ) {
-	// Return early if we're on a singular post.
-	if ( is_singular() ) {
+	global $wp_query;
+	// Return early if we're on a singular post or we only have one page.
+	if ( is_singular() || 1 === $wp_query->max_num_pages ) {
 		return;
 	}
 
