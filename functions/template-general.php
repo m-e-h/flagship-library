@@ -46,8 +46,8 @@ function flagship_load_favicon() {
 }
 
 /**
- * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
- * header right sidebar.
+ * Sets a common class, `.nav-menu`, for the custom menu widget if used as part
+ * of a site navigation element.
  *
  * @since  1.0.0
  * @access public
@@ -67,8 +67,20 @@ function flagship_header_menu_args( $args ) {
  * @param  $menu Menu output.
  * @return string $menu Modified menu output.
  */
+function flagship_widget_menu_wrap( $menu, $context = '' ) {
+	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', $context ) ) . $menu . '</nav>';
+}
+
+/**
+ * Wrap the header navigation menu in its own nav tags with markup API.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  $menu Menu output.
+ * @return string $menu Modified menu output.
+ */
 function flagship_header_menu_wrap( $menu ) {
-	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', 'header' ) ) . $menu . '</nav>';
+	return flagship_widget_menu_wrap( $menu, 'header' );
 }
 
 add_filter( 'get_search_form', 'flagship_get_search_form' );
