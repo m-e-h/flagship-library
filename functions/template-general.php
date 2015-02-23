@@ -132,8 +132,8 @@ function flagship_get_post_navigation( $args = array() ) {
 			'post_types'     => array(),
 			'prev_format'    => '<span class="nav-previous">%link</span>',
 			'next_format'    => '<span class="nav-next">%link</span>',
-			'prev_text'      => __( 'Previous', 'flagship' ) . esc_attr( $name ),
-			'next_text'      => __( 'Next', 'flagship' ) . esc_attr( $name ),
+			'prev_text'      => __( 'Previous', 'flagship-library' ) . esc_attr( $name ),
+			'next_text'      => __( 'Next', 'flagship-library' ) . esc_attr( $name ),
 			'in_same_term'   => false,
 			'excluded_terms' => '',
 			'taxonomy'       => 'category',
@@ -217,10 +217,10 @@ function flagship_get_posts_navigation( $args = array() ) {
 	$defaults = apply_filters( 'flagship_loop_nav_defaults',
 		array(
 			'format'         => 'pagination',
-			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship' ) ),
-			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship' ) ),
-			'prev_link_text' => __( 'Newer Posts', 'flagship' ),
-			'next_link_text' => __( 'Older Posts', 'flagship' ),
+			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship-library' ) ),
+			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship-library' ) ),
+			'prev_link_text' => __( 'Newer Posts', 'flagship-library' ),
+			'next_link_text' => __( 'Older Posts', 'flagship-library' ),
 		)
 	);
 
