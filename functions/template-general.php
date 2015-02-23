@@ -104,28 +104,36 @@ function flagship_get_search_form() {
  * @param  $args array
  * @return void
  */
-function flagship_singular_nav( $args = array() ) {
-	echo flagship_get_singular_nav( $args );
+function flagship_post_navigation( $args = array() ) {
+	echo flagship_get_post_navigation( $args );
 }
 
 /**
- * Helper function to build a next and previous posts navigation element on
+ * Helper function to build a next and previous post navigation element on
  * single entries. This takes care of all the annoying formatting which usually
  * would need to be done within a template.
+ *
+ * I originally wanted to use the new get_the_post_navigation tag for this;
+ * however, it's lacking a lot of the flexibility provided by using the old
+ * template tags directly. Until WordPress core gets its act together, I guess
+ * I'll just have to duplicate code for no good reason.
  *
  * @since  1.3.0
  * @access public
  * @param  $args array
  * @return string
  */
-function flagship_get_singular_nav( $args = array() ) {
-	$defaults = apply_filters( 'flagship_singular_nav_defaults',
+function flagship_get_post_navigation( $args = array() ) {
+	$obj  = get_post_type_object( get_post_type() );
+	$name = isset( $obj->labels->singular_name ) ? '&nbsp;' . $obj->labels->singular_name : '';
+
+	$defaults = apply_filters( 'flagship_get_post_navigation_defaults',
 		array(
-			'post_types'     => array( 'post', ),
+			'post_types'     => array(),
 			'prev_format'    => '<span class="nav-previous">%link</span>',
 			'next_format'    => '<span class="nav-next">%link</span>',
-			'prev_link'      => __( 'Previous Post', 'flagship' ),
-			'next_link'      => __( 'Next Post', 'flagship' ),
+			'prev_text'      => __( 'Previous', 'flagship' ) . esc_attr( $name ),
+			'next_text'      => __( 'Next', 'flagship' ) . esc_attr( $name ),
 			'in_same_term'   => false,
 			'excluded_terms' => '',
 			'taxonomy'       => 'category',
@@ -134,35 +142,43 @@ function flagship_get_singular_nav( $args = array() ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
+	// Bail if we're not on a single entry. All post types are allowed by default.
 	if ( ! is_singular( $args['post_types'] ) ) {
+		return;
+	}
+
+	$links = '';
+	// Previous post link. Can be filtered via WP Core's previous_post_link filter.
+	$links .= get_adjacent_post_link(
+		$args['prev_format'],
+		$args['prev_text'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		true,
+		$args['taxonomy']
+	);
+	// Next post link. Can be filtered via WP Core's next_post_link filter.
+	$links .= get_adjacent_post_link(
+		$args['next_format'],
+		$args['next_text'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		false,
+		$args['taxonomy']
+	);
+
+	// Bail if we don't have any posts to link to.
+	if ( empty( $links ) ) {
 		return;
 	}
 
 	$output = '';
 
 	$output .= '<nav ' . hybrid_get_attr( 'nav', 'single' ) . '>';
-
-	// Seriously, WordPress?
-	ob_start();
-	previous_post_link(
-		$args['prev_format'],
-		$args['prev_link'],
-		$args['in_same_term'],
-		$args['excluded_terms'],
-		$args['taxonomy']
-	);
-	next_post_link(
-		$args['next_format'],
-		$args['next_link'],
-		$args['in_same_term'],
-		$args['excluded_terms'],
-		$args['taxonomy']
-	);
-	$output .= ob_get_clean();
-
+	$output .= $links;
 	$output .= '</nav><!-- .nav-single -->';
 
-	return apply_filters( 'flagship_singular_nav', $output, $args );
+	return $output;
 }
 
 /**
@@ -173,24 +189,25 @@ function flagship_get_singular_nav( $args = array() ) {
  * @param  $args array
  * @return void
  */
-function flagship_loop_nav( $args = array() ) {
-	echo flagship_get_loop_nav( $args );
+function flagship_posts_navigation( $args = array() ) {
+	echo flagship_get_posts_navigation( $args );
 }
 
 /**
  * Helper function to build a newer/older or paginated navigation element within
  * a loop of multiple entries. This takes care of all the annoying formatting
- * which usually would need to be done within a template. This defaults to a
- * pagination format unless the site is using a version of WordPress older than
- * 4.1. For older sites, we fall back to the next and previous post links by
- * default.
+ * which usually would need to be done within a template.
+ *
+ * This defaults to a pagination format unless the site is using a version of
+ * WordPress older than 4.1. For older sites, we fall back to the next and
+ * previous post links by default.
  *
  * @since  1.3.0
  * @access public
  * @param  $args array
  * @return string
  */
-function flagship_get_loop_nav( $args = array() ) {
+function flagship_get_posts_navigation( $args = array() ) {
 	global $wp_query;
 	// Return early if we're on a singular post or we only have one page.
 	if ( is_singular() || 1 === $wp_query->max_num_pages ) {
