@@ -4,9 +4,9 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.1.1
  */
 
@@ -65,7 +65,7 @@ function flagship_display_breadcrumbs() {
 	// Loop through our theme mods to see if we have a match.
 	foreach ( $breadcrumb_mods as $mod => $tag ) {
 		// Return true if we find an enabled theme mod within the correct section.
-		if ( absint( get_theme_mod( $mod, 0 ) ) === 1 && $tag === true ) {
+		if ( 1 === absint( get_theme_mod( $mod, 0 ) ) && true === $tag ) {
 			return true;
 		}
 	}

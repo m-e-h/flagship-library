@@ -4,9 +4,9 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.0.0
  */
 
@@ -46,15 +46,15 @@ function flagship_load_favicon() {
 }
 
 /**
- * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
- * header right sidebar.
+ * Sets a common class, `.nav-menu`, for the custom menu widget if used as part
+ * of a site navigation element.
  *
  * @since  1.0.0
  * @access public
  * @param  array $args Header menu args.
  * @return array $args Modified header menu args.
  */
-function flagship_header_menu_args( $args ) {
+function flagship_widget_menu_args( $args ) {
 	$args['menu_class'] .= ' nav-menu';
 	return $args;
 }
@@ -67,8 +67,20 @@ function flagship_header_menu_args( $args ) {
  * @param  $menu Menu output.
  * @return string $menu Modified menu output.
  */
+function flagship_widget_menu_wrap( $menu, $context = '' ) {
+	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', $context ) ) . $menu . '</nav>';
+}
+
+/**
+ * Wrap the header navigation menu in its own nav tags with markup API.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  $menu Menu output.
+ * @return string $menu Modified menu output.
+ */
 function flagship_header_menu_wrap( $menu ) {
-	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', 'header' ) ) . $menu . '</nav>';
+	return flagship_widget_menu_wrap( $menu, 'header' );
 }
 
 add_filter( 'get_search_form', 'flagship_get_search_form' );
@@ -82,6 +94,155 @@ add_filter( 'get_search_form', 'flagship_get_search_form' );
 function flagship_get_search_form() {
 	$search = new Flagship_Search_Form;
 	return $search->get_form();
+}
+
+/**
+ * Outputs a navigation element for a singular entry.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return void
+ */
+function flagship_post_navigation( $args = array() ) {
+	echo flagship_get_post_navigation( $args );
+}
+
+/**
+ * Helper function to build a next and previous post navigation element on
+ * single entries. This takes care of all the annoying formatting which usually
+ * would need to be done within a template.
+ *
+ * I originally wanted to use the new get_the_post_navigation tag for this;
+ * however, it's lacking a lot of the flexibility provided by using the old
+ * template tags directly. Until WordPress core gets its act together, I guess
+ * I'll just have to duplicate code for no good reason.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return string
+ */
+function flagship_get_post_navigation( $args = array() ) {
+	$obj  = get_post_type_object( get_post_type() );
+	$name = isset( $obj->labels->singular_name ) ? '&nbsp;' . $obj->labels->singular_name : '';
+
+	$defaults = apply_filters( 'flagship_get_post_navigation_defaults',
+		array(
+			'post_types'     => array(),
+			'prev_format'    => '<span class="nav-previous">%link</span>',
+			'next_format'    => '<span class="nav-next">%link</span>',
+			'prev_text'      => __( 'Previous', 'flagship' ) . esc_attr( $name ),
+			'next_text'      => __( 'Next', 'flagship' ) . esc_attr( $name ),
+			'in_same_term'   => false,
+			'excluded_terms' => '',
+			'taxonomy'       => 'category',
+		)
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	// Bail if we're not on a single entry. All post types are allowed by default.
+	if ( ! is_singular( $args['post_types'] ) ) {
+		return;
+	}
+
+	$links = '';
+	// Previous post link. Can be filtered via WP Core's previous_post_link filter.
+	$links .= get_adjacent_post_link(
+		$args['prev_format'],
+		$args['prev_text'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		true,
+		$args['taxonomy']
+	);
+	// Next post link. Can be filtered via WP Core's next_post_link filter.
+	$links .= get_adjacent_post_link(
+		$args['next_format'],
+		$args['next_text'],
+		$args['in_same_term'],
+		$args['excluded_terms'],
+		false,
+		$args['taxonomy']
+	);
+
+	// Bail if we don't have any posts to link to.
+	if ( empty( $links ) ) {
+		return;
+	}
+
+	$output = '';
+
+	$output .= '<nav ' . hybrid_get_attr( 'nav', 'single' ) . '>';
+	$output .= $links;
+	$output .= '</nav><!-- .nav-single -->';
+
+	return $output;
+}
+
+/**
+ * Outputs a navigation element for a loop.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return void
+ */
+function flagship_posts_navigation( $args = array() ) {
+	echo flagship_get_posts_navigation( $args );
+}
+
+/**
+ * Helper function to build a newer/older or paginated navigation element within
+ * a loop of multiple entries. This takes care of all the annoying formatting
+ * which usually would need to be done within a template.
+ *
+ * This defaults to a pagination format unless the site is using a version of
+ * WordPress older than 4.1. For older sites, we fall back to the next and
+ * previous post links by default.
+ *
+ * @since  1.3.0
+ * @access public
+ * @param  $args array
+ * @return string
+ */
+function flagship_get_posts_navigation( $args = array() ) {
+	global $wp_query;
+	// Return early if we're on a singular post or we only have one page.
+	if ( is_singular() || 1 === $wp_query->max_num_pages ) {
+		return;
+	}
+
+	$defaults = apply_filters( 'flagship_loop_nav_defaults',
+		array(
+			'format'         => 'pagination',
+			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship' ) ),
+			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship' ) ),
+			'prev_link_text' => __( 'Newer Posts', 'flagship' ),
+			'next_link_text' => __( 'Older Posts', 'flagship' ),
+		)
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$output = '';
+
+	$output .= '<nav ' . hybrid_get_attr( 'nav', 'archive' ) . '>';
+	$output .= sprintf( '<span class="nav-previous">%s</span>', get_previous_posts_link( $args['prev_link_text'] ) );
+	$output .= sprintf( '<span class="nav-next">%s</span>', get_next_posts_link( $args['next_link_text'] ) );
+	$output .= '</nav><!-- .nav-archive -->';
+
+	if ( function_exists( 'the_posts_pagination' ) && 'pagination' === $args['format'] ) {
+		$output = get_the_posts_pagination(
+			array(
+				'prev_text' => $args['prev_text'],
+				'next_text' => $args['next_text'],
+			)
+		);
+	}
+
+	return apply_filters( 'flagship_loop_nav', $output, $args );
 }
 
 /**
@@ -100,4 +261,20 @@ function flagship_get_credit_link() {
 	$title = sprintf( __( 'Purpose-Built WordPress Theme by %s', 'flagship-library' ), $name );
 
 	return sprintf( '<a class="author-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+}
+
+/**
+ * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
+ * header right sidebar.
+ *
+ * @deprecated This is no longer recommended. Use flagship_widget_menu_args instead.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  array $args Header menu args.
+ * @return array $args Modified header menu args.
+ */
+function flagship_header_menu_args( $args ) {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'flagship_widget_menu_args' );
+	return flagship_widget_menu_args( $args );
 }

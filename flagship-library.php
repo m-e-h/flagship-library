@@ -4,9 +4,9 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.0.0
  */
 
@@ -25,7 +25,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @since 1.1.0
 		 * @type  string
 		 */
-		protected $version = '1.2.1';
+		protected $version = '1.3.0';
 
 		/**
 		 * Prefix to prevent conflicts.

@@ -9,27 +9,28 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.0.0
  */
 
 // Attributes for major structural elements.
-add_filter( 'hybrid_attr_header',         'flagship_attr_header_class'         );
-add_filter( 'hybrid_attr_site-container', 'flagship_attr_site_container'       );
-add_filter( 'hybrid_attr_site-inner',     'flagship_attr_site_inner'           );
+add_filter( 'hybrid_attr_header',         'flagship_attr_header_class' );
+add_filter( 'hybrid_attr_site-container', 'flagship_attr_site_container' );
+add_filter( 'hybrid_attr_site-inner',     'flagship_attr_site_inner' );
 add_filter( 'hybrid_attr_wrap',           'flagship_attr_wrap',          10, 2 );
-add_filter( 'hybrid_attr_content',        'flagship_attr_content_class'        );
-add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class'         );
+add_filter( 'hybrid_attr_content',        'flagship_attr_content_class' );
+add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class' );
 add_filter( 'hybrid_attr_sidebar',        'flagship_attr_sidebar_class', 10, 2 );
 add_filter( 'hybrid_attr_menu',           'flagship_attr_menu_class',    10, 2 );
 add_filter( 'hybrid_attr_widget-menu',    'flagship_attr_widget_menu',   10, 2 );
+add_filter( 'hybrid_attr_nav',            'flagship_attr_nav',           10, 2 );
 
 // Header attributes.
-add_filter( 'hybrid_attr_branding',         'flagship_attr_branding_class'   );
+add_filter( 'hybrid_attr_branding',         'flagship_attr_branding_class' );
 add_filter( 'hybrid_attr_site-title',       'flagship_attr_site_title_class' );
-add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class'  );
+add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class' );
 
 // Post-specific attributes.
 add_filter( 'hybrid_attr_entry-summary', 'flagship_attr_entry_summary_class' );
@@ -183,6 +184,30 @@ function flagship_attr_widget_menu( $attr, $context ) {
 
 	$attr['itemscope']  = 'itemscope';
 	$attr['itemtype']   = 'http://schema.org/SiteNavigationElement';
+
+	return $attr;
+}
+
+/**
+ * Attributes for nav elements which aren't necessarily site navigation menus.
+ * One example use case for this would be pagination and page link blocks.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $attr
+ * @param  string  $context
+ * @return array
+ */
+function flagship_attr_nav( $attr, $context ) {
+	$class = 'nav';
+
+	if ( ! empty( $context ) ) {
+		$attr['id'] = "nav-{$context}";
+		$class    .= " nav-{$context}";
+	}
+
+	$attr['class'] = $class;
+	$attr['role']  = 'navigation';
 
 	return $attr;
 }

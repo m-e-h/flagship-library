@@ -4,9 +4,9 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.0.0
  */
 
@@ -15,7 +15,7 @@
  *
  * @since  1.1.0
  * @access public
- * @param  array $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_author( $args = array() ) {
@@ -30,11 +30,10 @@ function flagship_entry_author( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  $args array
  * @return string
  */
 function flagship_get_entry_author( $args = array() ) {
-
 	$defaults = apply_filters( 'flagship_entry_author_defaults',
 		array(
 			'text'   => '%s',
@@ -50,11 +49,11 @@ function flagship_get_entry_author( $args = array() ) {
 }
 
 /**
- * Outputs a post's pulbished date.
+ * Outputs a post's published date.
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_published( $args = array() ) {
@@ -62,25 +61,23 @@ function flagship_entry_published( $args = array() ) {
 }
 
 /**
- * Function for getting the current post's author in The Loop and linking to t
- * he author archive page. This function was created because core WordPress does
- * not have template tags with proper translation and RTL support for this.
- * An equivalent getter function for `the_author_posts_link()` would instantly
- * solve this issue.
+ * Helper function for getting a post's published date and formatting it to be
+ * displayed in a template.
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  $args array
  * @return string
  */
 function flagship_get_entry_published( $args = array() ) {
-
 	$output = '';
 
 	$defaults = apply_filters( 'flagship_entry_published_defaults',
 		array(
 			'before' => '',
 			'after'  => '',
+			'attr'   => 'entry-published',
+			'date'   => get_the_date(),
 			'wrap'   => '<time %s>%s</time>',
 		)
 	);
@@ -88,7 +85,7 @@ function flagship_get_entry_published( $args = array() ) {
 	$args = wp_parse_args( $args, $defaults );
 
 	$output .= $args['before'];
-	$output .= sprintf( $args['wrap'], hybrid_get_attr( 'entry-published' ), get_the_date() );
+	$output .= sprintf( $args['wrap'], hybrid_get_attr( $args['attr'] ), $args['date'] );
 	$output .= $args['after'];
 
 	return apply_filters( 'flagship_entry_published', $output, $args );
@@ -99,7 +96,7 @@ function flagship_get_entry_published( $args = array() ) {
  *
  * @since  1.1.0
  * @access public
- * @param  array   $args
+ * @param  $args array
  * @return void
  */
 function flagship_entry_comments_link( $args = array() ) {
@@ -121,11 +118,10 @@ function flagship_entry_comments_link( $args = array() ) {
  * Output passes through 'flagship_get_entry_comments_link' filter before returning.
  *
  * @since  1.1.0
- * @param  array $args Empty array if no arguments.
+ * @param  $args array Empty array if no arguments.
  * @return string output
  */
 function flagship_get_entry_comments_link( $args = array() ) {
-
 	$defaults = apply_filters( 'flagship_entry_comments_link_defaults',
 		array(
 			'after'       => '',
@@ -152,5 +148,4 @@ function flagship_get_entry_comments_link( $args = array() ) {
 	$output = '<span class="entry-comments-link">' . $args['before'] . $comments . $args['after'] . '</span>';
 
 	return apply_filters( 'flagship_entry_comments_link', $output, $args );
-
 }

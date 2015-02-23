@@ -4,9 +4,9 @@
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
- * @copyright   Copyright (c) 2014, Flagship Software, LLC
+ * @copyright   Copyright (c) 2015, Flagship Software, LLC
  * @license     GPL-2.0+
- * @link        http://flagshipwp.com/
+ * @link        https://flagshipwp.com/
  * @since       1.0.0
  */
 
@@ -23,6 +23,9 @@ add_action( 'wp_head', 'flagship_doctitle', 0 );
  * @return void
  */
 function flagship_doctitle() {
+	if ( function_exists( '_wp_render_title_tag' ) ) {
+		return;
+	}
 	?>
 	<title><?php wp_title( '-' ); ?></title>
 	<?php
