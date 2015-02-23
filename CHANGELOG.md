@@ -1,5 +1,23 @@
 # Changelog for Flagship Library
 
+## 1.3.0
+
+This is mostly a maintenance release, but it does add a few new features and improve some of our existing functions within the library. The following functions were added:
+
+- flagship_post_navigation
+- flagship_get_post_navigation
+- flagship_posts_navigation
+- flagship_get_posts_navigation
+- flagship_attr_nav
+- flagship_widget_menu_wrap
+- flagship_widget_menu_args
+
+The `flagship_header_menu_args` function was deprecated and will be removed in a future release. For more information on using the new functions, see the inline code documentation or check out how they're being used in the latest version of [Compass](https://github.com/FlagshipWP/compass).
+
+The `flagship_get_entry_published` function had some additional arguments added to make it easer to use a different method of determining the published date, such as `get the_modified_date`.
+
+We also added support for the new WordPress 4.1 `title-tag` feature by only outputting `the_title` markup on older versions of WordPress. Themes which integrate the Flagship Library should now use `add_theme_support( 'title-tag' )` within their setup function.
+
 ## 1.2.1
 
 Fixed an incorrect textdomain that made it in during development.
