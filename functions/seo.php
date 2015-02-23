@@ -23,6 +23,9 @@ add_action( 'wp_head', 'flagship_doctitle', 0 );
  * @return void
  */
 function flagship_doctitle() {
+	if ( function_exists( '_wp_render_title_tag' ) ) {
+		return;
+	}
 	?>
 	<title><?php wp_title( '-' ); ?></title>
 	<?php
