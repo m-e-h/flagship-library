@@ -54,7 +54,7 @@ function flagship_load_favicon() {
  * @param  array $args Header menu args.
  * @return array $args Modified header menu args.
  */
-function flagship_header_menu_args( $args ) {
+function flagship_widget_menu_args( $args ) {
 	$args['menu_class'] .= ' nav-menu';
 	return $args;
 }
@@ -244,4 +244,20 @@ function flagship_get_credit_link() {
 	$title = sprintf( __( 'Purpose-Built WordPress Theme by %s', 'flagship-library' ), $name );
 
 	return sprintf( '<a class="author-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+}
+
+/**
+ * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
+ * header right sidebar.
+ *
+ * @deprecated This is no longer recommended. Use flagship_widget_menu_args instead.
+ *
+ * @since  1.0.0
+ * @access public
+ * @param  array $args Header menu args.
+ * @return array $args Modified header menu args.
+ */
+function flagship_header_menu_args( $args ) {
+	_deprecated_function( __FUNCTION__, '1.3.0', 'flagship_widget_menu_args' );
+	return flagship_widget_menu_args( $args );
 }
