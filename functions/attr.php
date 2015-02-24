@@ -20,7 +20,6 @@ add_filter( 'hybrid_attr_header',         'flagship_attr_header_class' );
 add_filter( 'hybrid_attr_site-container', 'flagship_attr_site_container' );
 add_filter( 'hybrid_attr_site-inner',     'flagship_attr_site_inner' );
 add_filter( 'hybrid_attr_wrap',           'flagship_attr_wrap',          10, 2 );
-add_filter( 'hybrid_attr_content',        'flagship_attr_content_class' );
 add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class' );
 add_filter( 'hybrid_attr_sidebar',        'flagship_attr_sidebar_class', 10, 2 );
 add_filter( 'hybrid_attr_menu',           'flagship_attr_menu_class',    10, 2 );
@@ -92,19 +91,6 @@ function flagship_attr_wrap( $attr, $context ) {
 		return $attr;
 	}
 	$attr['class'] = "wrap {$context}-wrap";
-	return $attr;
-}
-
-/**
- * Main content container of the page attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_content_class( $attr ) {
-	$attr['class'] = 'content';
 	return $attr;
 }
 
