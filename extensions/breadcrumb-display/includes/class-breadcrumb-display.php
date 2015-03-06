@@ -41,7 +41,7 @@ class Flagship_Breadcrumb_Display extends Flagship_Customizer_Base {
 
 		$priority = 10;
 
-		foreach ( $this->get_breadcrumb_options() as $breadcrumb => $setting ) {
+		foreach ( $this->get_options() as $breadcrumb => $setting ) {
 
 			$wp_customize->add_setting(
 				$breadcrumb,
@@ -70,8 +70,8 @@ class Flagship_Breadcrumb_Display extends Flagship_Customizer_Base {
 	 * @access public
 	 * @return array $breadcrumbs
 	 */
-	public function get_breadcrumb_options() {
-		$breadcrumbs = array(
+	public function get_options() {
+		return apply_filters( 'flagship_breadcrumb_options', array(
 			'flagship_breadcrumb_single' => array(
 				'default'  => 0,
 				'label'    => __( 'Single Entries', 'flagship-library' ),
@@ -96,8 +96,20 @@ class Flagship_Breadcrumb_Display extends Flagship_Customizer_Base {
 				'default'  => 0,
 				'label'    => __( 'Attachment/Media Pages', 'flagship-library' ),
 			),
-		);
-		return apply_filters( 'flagship_get_breadcrumb_options', $breadcrumbs );
+		) );
+	}
+
+	/**
+	 * Deprecated wrapper method for backwards compatbility.
+	 *
+	 * @deprecated use get_options instead.
+	 *
+	 * @since  1.1.0
+	 * @access public
+	 * @return array $breadcrumbs
+	 */
+	public function get_breadcrumb_options() {
+		return $this->get_options();
 	}
 
 }

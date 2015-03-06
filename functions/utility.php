@@ -45,25 +45,21 @@ function flagship_display_breadcrumbs() {
 		return false;
 	}
 	// Grab our available breadcrumb display options.
-	$breadcrumb_options = array_keys( flagship_breadcrumb_display()->get_breadcrumb_options() );
+	$options = array_keys( flagship_breadcrumb_display()->get_options() );
 	// Set up an array of template tags to map to our breadcrumb display options.
-	$template_tags = array(
-		is_singular() && ! is_attachment(),
-		is_page(),
-		is_home() && ! is_front_page(),
-		is_archive(),
-		is_404(),
-		is_attachment(),
+	$tags = apply_filters( 'flagship_breadcrumb_tags',
+		array(
+			is_singular() && ! is_attachment(),
+			is_page(),
+			is_home() && ! is_front_page(),
+			is_archive(),
+			is_404(),
+			is_attachment(),
+		)
 	);
 
-	// Use breadcrumb options as keys and template tags as values for our array of mods.
-	$breadcrumb_mods = array_combine( $breadcrumb_options, $template_tags );
-
-	// Allow developers to filter the mods that we're going to loop through.
-	$breadcrumb_mods = apply_filters( 'flagship_breadcrumb_mods', $breadcrumb_mods, $breadcrumb_options, $template_tags );
-
 	// Loop through our theme mods to see if we have a match.
-	foreach ( $breadcrumb_mods as $mod => $tag ) {
+	foreach ( array_combine( $options, $tags ) as $mod => $tag ) {
 		// Return true if we find an enabled theme mod within the correct section.
 		if ( 1 === absint( get_theme_mod( $mod, 0 ) ) && true === $tag ) {
 			return true;
