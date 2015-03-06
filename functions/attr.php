@@ -32,6 +32,7 @@ add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class' );
 // Post-specific attributes.
 add_filter( 'hybrid_attr_entry-summary',    'flagship_attr_entry_summary_class' );
 // Other attributes.
+add_filter( 'hybrid_attr_nav',              'flagship_attr_nav', 10, 2 );
 add_filter( 'hybrid_attr_author-box',       'flagship_attr_author_box', 10, 2 );
 
 /**
@@ -236,6 +237,30 @@ function flagship_attr_site_desc_class( $attr ) {
  */
 function flagship_attr_entry_summary_class( $attr ) {
 	$attr['class'] = 'entry-content summary';
+	return $attr;
+}
+
+/**
+ * Attributes for nav elements which aren't necessarily site navigation menus.
+ * One example use case for this would be pagination and page link blocks.
+ *
+ * @since  2.0.0
+ * @access public
+ * @param  array   $attr
+ * @param  string  $context
+ * @return array
+ */
+function flagship_attr_nav( $attr, $context ) {
+	$class = 'nav';
+
+	if ( ! empty( $context ) ) {
+		$attr['id'] = "nav-{$context}";
+		$class    .= " nav-{$context}";
+	}
+
+	$attr['class'] = $class;
+	$attr['role']  = 'navigation';
+
 	return $attr;
 }
 
