@@ -49,7 +49,7 @@ function flagship_display_breadcrumbs() {
 	// Set up an array of template tags to map to our breadcrumb display options.
 	$tags = apply_filters( 'flagship_breadcrumb_tags',
 		array(
-			is_singular() && ! is_attachment(),
+			is_singular() && ! is_attachment() && ! is_page(),
 			is_page(),
 			is_home() && ! is_front_page(),
 			is_archive(),
