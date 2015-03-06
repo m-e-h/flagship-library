@@ -246,6 +246,55 @@ function flagship_get_posts_navigation( $args = array() ) {
 }
 
 /**
+ * Display a link to the customizer panel.
+ *
+ * @since  1.4.0
+ * @access public
+ * @param  $args array options for how the link will be formatted
+ * @return void
+ */
+function flagship_customizer_link( $args = array() ) {
+	echo flagship_get_customizer_link( $args );
+}
+
+/**
+ * Format a link to the customizer panel.
+ *
+ * Since WordPress 4.1, the customizer panel allows for deeplinking, but setting
+ * up a link can be rather tedious. This function wraps the query args required
+ * to deep link to a customzer panel or control, plus return to the correct page
+ * when the customizer is exited by the user.
+ *
+ * @since  1.4.0
+ * @access public
+ * @param  $args array options for how the link will be formatted
+ * @return string an escaped link to the WordPress customizer panel.
+ */
+function flagship_get_customizer_link( $args = array() ) {
+	$defaults = array(
+		'focus_type'   => 'panel',
+		'focus_target' => 'widgets',
+		'return'       => get_permalink(),
+	);
+
+	$args = wp_parse_args( $defaults, $args );
+
+	$query_args = array();
+	$type       = $args['focus_type'];
+	$target     = $args['focus_target'];
+	$return     = $args['return'];
+
+	if ( ! empty( $type ) && ! empty( $target ) ) {
+		$query_args[] = array( 'autofocus' => array( $type => $target, ), );
+	}
+	if ( ! empty( $return ) ) {
+		$query_args['return'] = urlencode( wp_unslash( $return ) );
+	}
+
+	return esc_url( add_query_arg( $query_args, admin_url( 'customize.php' ) ) );
+}
+
+/**
  * Returns a formatted theme credit link.
  *
  * @since  1.1.0
