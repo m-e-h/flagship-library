@@ -45,8 +45,9 @@ class Flagship_Footer_Widgets {
 	 * @return void
 	 */
 	private function wp_hooks() {
-		add_action( 'widgets_init', array( $this, 'register_footer_widgets' ) );
-		add_action( 'tha_footer_before', array( $this, 'the_footer_widgets' ) );
+		add_action( 'widgets_init',               array( $this, 'register_footer_widgets' ) );
+		add_action( 'hybrid_attr_footer-widgets', array( $this, 'attr_footer_widgets' ) );
+		add_action( 'tha_footer_before',          array( $this, 'the_footer_widgets' ) );
 	}
 
 	/**
@@ -76,6 +77,20 @@ class Flagship_Footer_Widgets {
 
 			$counter++;
 		}
+	}
+
+	/**
+	 * Footer widgets element attributes.
+	 *
+	 * @since  1.4.0
+	 * @access public
+	 * @param  array   $attr
+	 * @return array
+	 */
+	function attr_footer_widgets( $attr ) {
+		$attr['id']    = 'footer-widgets';
+		$attr['class'] = 'footer-widgets';
+		return $attr;
 	}
 
 	/**
