@@ -195,9 +195,9 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			// Set up an array of library file paths which can be filtered.
 			$includes = apply_filters( 'flagship_library_includes',
 				array(
-					'classes/class-customizer-base.php',
-					'classes/class-search-form.php',
-					'classes/class-style-builder.php',
+					'classes/customizer-base.php',
+					'classes/search-form.php',
+					'classes/style-builder.php',
 					'functions/attr.php',
 					'functions/seo.php',
 					'functions/template-entry.php',
@@ -220,10 +220,10 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  void
 		 */
 		private function extensions_includes() {
-			$extensions_dir = trailingslashit( $this->get_library_directory() ) . 'extensions/';
-			require_if_theme_supports( 'site-logo', $extensions_dir . 'site-logo/init.php' );
-			require_if_theme_supports( 'breadcrumb-trail', $extensions_dir . 'breadcrumb-display/init.php' );
-			require_if_theme_supports( 'flagship-footer-widgets', $extensions_dir . 'footer-widgets/init.php' );
+			$dir = trailingslashit( $this->get_library_directory() ) . 'extensions/';
+			require_if_theme_supports( 'site-logo', $dir . 'site-logo/init.php' );
+			require_if_theme_supports( 'breadcrumb-trail', $dir . 'breadcrumb-display/init.php' );
+			require_if_theme_supports( 'flagship-footer-widgets', $dir . 'footer-widgets/init.php' );
 		}
 
 	}

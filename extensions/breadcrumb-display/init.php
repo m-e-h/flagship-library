@@ -11,7 +11,7 @@
  */
 
 // Include our required extension files.
-require_once( trailingslashit( dirname( __FILE__ ) ) . 'includes/class-breadcrumb-display.php' );
+require_once trailingslashit( dirname( __FILE__ ) ) . 'classes/breadcrumb-display.php';
 
 /**
  * Allow themes and plugins to access Flagship_Breadcrumb_Display methods and

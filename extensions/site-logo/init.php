@@ -19,19 +19,17 @@ add_action( 'init', 'flaghip_logo_init', 12 );
  * @return void
  */
 function flaghip_logo_init() {
-	$logo_includes = trailingslashit( dirname( __FILE__ ) ) . 'includes/';
-
+	$dir = trailingslashit( dirname( __FILE__ ) );
 	// Always include our template tags if our theme has declared support.
-	require_once( $logo_includes . 'template-tags.php' );
+	require_once $dir . 'includes/template-tags.php';
 
 	// Return early if the standalone plugin and/or Jetpack module is activated.
 	if ( class_exists( 'Site_Logo', false ) ) {
 		return;
 	}
-
-	require_once( $logo_includes . 'class-site-logo.php' );
+	require_once $dir . 'classes/site-logo.php';
 	if ( flagship_library()->is_customizer_preview() ) {
-		require_once( $logo_includes . 'class-site-logo-control.php' );
+		require_once $dir . 'classes/site-logo-control.php';
 	}
 }
 

@@ -11,7 +11,7 @@
  */
 
 // Include our required extension files.
-require_once( trailingslashit( dirname( __FILE__ ) ) . 'includes/class-footer-widgets.php' );
+require_once trailingslashit( dirname( __FILE__ ) ) . 'classes/footer-widgets.php';
 
 /**
  * Allow themes and plugins to access Flagship_Footer_Widgets methods and
