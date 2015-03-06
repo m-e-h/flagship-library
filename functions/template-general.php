@@ -301,15 +301,24 @@ function flagship_get_customizer_link( $args = array() ) {
  * @access public
  * @return string
  */
+function flagship_credit_link() {
+	echo flagship_get_credit_link();
+}
+
+/**
+ * Returns a formatted theme credit link.
+ *
+ * @since  1.1.0
+ * @access public
+ * @return string
+ */
 function flagship_get_credit_link() {
-	$theme = wp_get_theme( get_template() );
-	$uri   = $theme->get( 'AuthorURI' );
-	$name  = $theme->display( 'Author', false, true );
-
-	// Translators: Theme name.
-	$title = sprintf( __( 'Purpose-Built WordPress Theme by %s', 'flagship-library' ), $name );
-
-	return sprintf( '<a class="author-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
+	$link = sprintf( '<a class="author-link" href="%s" title="%s">%s</a>',
+		'https://flagshipwp.com',
+		__( 'Purpose-Built WordPress Theme by', 'flagship-library' ) . ' Flagship',
+		'Flagship'
+	);
+	return apply_filters( 'flagship_credit_link', $link );
 }
 
 /**
