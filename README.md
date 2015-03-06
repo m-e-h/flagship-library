@@ -4,7 +4,7 @@ A collection of helpful functions and classes to make creating an awesome theme 
 
 __Contributors:__ [Robert Neu](https://github.com/robneu)  
 __Requires:__ WordPress 4.0, Hybrid Core 2.0.3  
-__Tested up to:__ WordPress 4.0, Hybrid Core 2.0.3  
+__Tested up to:__ WordPress 4.1.1, Hybrid Core 2.0.4  
 __License:__ [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.html)  
 
 There are a lot of things that go into a well-crafted theme. You need to make sure everything is SEO-friendly, you have to format commonly re-used bits of markup, and now more than ever you need to make it easy for your users to interact with your theme using the WordPress customizer.
