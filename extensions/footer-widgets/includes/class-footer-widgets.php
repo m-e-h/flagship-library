@@ -98,15 +98,10 @@ class Flagship_Footer_Widgets {
 
 		$counter = $this->counter;
 
-		?>
-		<div <?php hybrid_attr( 'footer-widgets' ); ?>>
-			<div <?php hybrid_attr( 'wrap', 'footer-widgets' ); ?>>
-				<?php while ( $counter <= absint( $this->footer_widgets[0] ) ) : ?>
-					<?php include( locate_template( 'sidebar/footer-widgets.php' ) ); ?>
-					<?php $counter++; ?>
-				<?php endwhile; ?>
-			</div>
-		</div>
-		<?php
+		// Use the theme's footer widgets template if it exists.
+		if ( '' !== locate_template( 'flagship/footer-widgets.php' ) ) {
+			return require_once locate_template( 'flagship/footer-widgets.php' );
+		}
+		require_once flagship_library()->get_library_directory() . '/extensions/footer-widgets/templates/footer-widgets.php';
 	}
 }
