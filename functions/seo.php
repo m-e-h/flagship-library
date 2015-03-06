@@ -11,12 +11,13 @@
  */
 
 // Remove unwanted default Hybrid head elements.
-remove_action( 'wp_head', 'hybrid_meta_template', 1 );
-remove_action( 'wp_head', 'hybrid_doctitle',      0 );
+remove_action( 'wp_head',  'hybrid_meta_template', 1 );
+remove_action( 'wp_head',  'hybrid_doctitle',      0 );
+remove_filter( 'wp_title', 'hybrid_wp_title', 1, 3 );
 
 add_action( 'wp_head', 'flagship_doctitle', 0 );
 /**
- * Add the title to the header with a more SEO-friendly seperator.
+ * Add the title to the header on WordPress versions older than 4.1.
  *
  * @since  1.0.0
  * @access public
@@ -27,7 +28,7 @@ function flagship_doctitle() {
 		return;
 	}
 	?>
-	<title><?php wp_title( '-' ); ?></title>
+	<title><?php wp_title( '|' ); ?></title>
 	<?php
 }
 
