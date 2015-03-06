@@ -16,26 +16,23 @@
  */
 
 // Attributes for major structural elements.
-add_filter( 'hybrid_attr_header',         'flagship_attr_header_class' );
-add_filter( 'hybrid_attr_site-container', 'flagship_attr_site_container' );
-add_filter( 'hybrid_attr_site-inner',     'flagship_attr_site_inner' );
-add_filter( 'hybrid_attr_wrap',           'flagship_attr_wrap',          10, 2 );
-add_filter( 'hybrid_attr_footer',         'flagship_attr_footer_class' );
-add_filter( 'hybrid_attr_sidebar',        'flagship_attr_sidebar_class', 10, 2 );
-add_filter( 'hybrid_attr_menu',           'flagship_attr_menu_class',    10, 2 );
-add_filter( 'hybrid_attr_widget-menu',    'flagship_attr_widget_menu',   10, 2 );
-add_filter( 'hybrid_attr_nav',            'flagship_attr_nav',           10, 2 );
-
+add_filter( 'hybrid_attr_header',           'flagship_attr_header_class' );
+add_filter( 'hybrid_attr_site-container',   'flagship_attr_site_container' );
+add_filter( 'hybrid_attr_site-inner',       'flagship_attr_site_inner' );
+add_filter( 'hybrid_attr_wrap',             'flagship_attr_wrap', 10, 2 );
+add_filter( 'hybrid_attr_footer',           'flagship_attr_footer_class' );
+add_filter( 'hybrid_attr_sidebar',          'flagship_attr_sidebar_class', 10, 2 );
+add_filter( 'hybrid_attr_menu',             'flagship_attr_menu_class', 10, 2 );
+add_filter( 'hybrid_attr_widget-menu',      'flagship_attr_widget_menu', 10, 2 );
+add_filter( 'nav_menu_link_attributes',     'flagship_add_menu_atts', 10, 3 );
 // Header attributes.
 add_filter( 'hybrid_attr_branding',         'flagship_attr_branding_class' );
 add_filter( 'hybrid_attr_site-title',       'flagship_attr_site_title_class' );
 add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class' );
-
 // Post-specific attributes.
-add_filter( 'hybrid_attr_entry-summary', 'flagship_attr_entry_summary_class' );
-
+add_filter( 'hybrid_attr_entry-summary',    'flagship_attr_entry_summary_class' );
 // Other attributes.
-add_filter( 'hybrid_attr_author-box', 'flagship_attr_author_box', 10, 2 );
+add_filter( 'hybrid_attr_author-box',       'flagship_attr_author_box', 10, 2 );
 
 /**
  * Page <header> element attributes.
@@ -126,7 +123,7 @@ function flagship_attr_sidebar_class( $attr, $context ) {
 }
 
 /**
- * Nav menu attributes.
+ * Add a menu context element to the class attribute to make styling easier.
  *
  * @since  1.0.0
  * @access public
@@ -135,11 +132,10 @@ function flagship_attr_sidebar_class( $attr, $context ) {
  * @return array
  */
 function flagship_attr_menu_class( $attr, $context ) {
-	$class = 'menu';
-	if ( ! empty( $context ) ) {
-		$class .= " menu-{$context}";
+	if ( empty( $context ) ) {
+		return $attr;
 	}
-	$attr['class'] = $class;
+	$attr['class'] .= " menu-{$context}";
 	return $attr;
 }
 
@@ -175,27 +171,20 @@ function flagship_attr_widget_menu( $attr, $context ) {
 }
 
 /**
- * Attributes for nav elements which aren't necessarily site navigation menus.
- * One example use case for this would be pagination and page link blocks.
+ * Add URL itemprop to WordPress menu items.
  *
- * @since  2.0.0
+ * @since  1.3.1
  * @access public
- * @param  array   $attr
- * @param  string  $context
- * @return array
+ * @param  $atts array Existing link attributes.
+ * @return $atts array Amended comment attributes.
  */
-function flagship_attr_nav( $attr, $context ) {
-	$class = 'nav';
-
-	if ( ! empty( $context ) ) {
-		$attr['id'] = "nav-{$context}";
-		$class    .= " nav-{$context}";
+function flagship_add_menu_atts( $atts, $item, $args ) {
+	// Return early if we're not working with an actual navigation menu.
+	if ( ! isset( $args->menu_class ) || false === stripos( $args->menu_class, 'menu' ) ) {
+		return $atts;
 	}
-
-	$attr['class'] = $class;
-	$attr['role']  = 'navigation';
-
-	return $attr;
+	$atts['itemprop'] = 'url';
+	return $atts;
 }
 
 /**
