@@ -1,6 +1,6 @@
 <?php
 /**
- * General theme helper functions.
+ * Flagship Footer Widgets Class.
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
