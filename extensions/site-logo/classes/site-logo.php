@@ -53,7 +53,7 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 * @uses add_filter
 	 */
 	protected function wp_hooks() {
-		add_action( 'wp_head',                 array( $this, 'head_text_styles' ) );
+		add_action( 'tha_body_top',            array( $this, 'head_text_styles' ) );
 		add_action( 'delete_attachment',       array( $this, 'reset_on_attachment_delete' ) );
 		add_filter( 'body_class',              array( $this, 'body_classes' ) );
 		add_filter( 'image_size_names_choose', array( $this, 'media_manager_image_sizes' ) );
@@ -168,22 +168,26 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 * @uses esc_html()
 	 */
 	public function head_text_styles() {
-		// Bail if our theme supports custom headers or  header text isn't hidden.
-		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 1 ) ) {
+		// Bail if our text isn't hidden.
+		if ( get_theme_mod( 'site_logo_header_text', 1 ) ) {
 			return;
 		}
-
 		// hide our header text if display Header Text is unchecked.
-		?>
-		<!-- Site Logo: hide header text -->
-		<style type="text/css">
-			.site-title,
-			.site-description {
-				clip: rect(1px, 1px, 1px, 1px);
-				position: absolute;
-			}
-		</style>
-		<?php
+		add_filter( 'hybrid_attr_site-title',       array( $this, 'hide_text' ) );
+		add_filter( 'hybrid_attr_site-description', array( $this, 'hide_text' ) );
+	}
+
+	/**
+	 * Filter the attributes of our site title and description to hide them.
+	 *
+	 * @since  1.4.0
+	 * @access public
+	 * @param  $attr array the current attributes
+	 * @return $attr array the modified attributes
+	 */
+	public function hide_text( $attr ) {
+		$attr['class'] = 'screen-reader-text';
+		return $attr;
 	}
 
 	/**
