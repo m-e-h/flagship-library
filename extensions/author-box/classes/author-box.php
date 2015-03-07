@@ -11,7 +11,7 @@
  */
 
 /**
- * A class to register and load templates for footer widget areas.
+ * A class to register settings and load templates for author boxes.
  *
  * @package FlagshipLibrary
  */
@@ -24,7 +24,7 @@ class Flagship_Author_Box {
 	 *
 	 * @since  1.4.0
 	 * @access public
-	 * @uses   Flagship_Footer_Widgets::$wp_hooks
+	 * @uses   Flagship_Author_Box::$wp_hooks
 	 * @return void
 	 */
 	public function run() {
@@ -80,7 +80,7 @@ class Flagship_Author_Box {
 	}
 
 	/**
-	 * Displays all registered footer widget areas using a template.
+	 * Displays the single author box using a template.
 	 *
 	 * @since  1.4.0
 	 * @access public
@@ -107,11 +107,11 @@ class Flagship_Author_Box {
 	}
 
 	/**
-	 * Displays all registered footer widget areas using a template.
+	* Displays the archive author box using a template.
 	 *
 	 * @since  1.4.0
 	 * @access public
-	 * @uses   locate_template() Load the footer widget template.
+	 * @uses   locate_template() Load the archive author box template.
 	 * @return void
 	 */
 	public function author_box_archive() {
@@ -130,7 +130,7 @@ class Flagship_Author_Box {
 			return;
 		}
 
-		// Use the theme's footer widgets template if it exists.
+		// Use the theme's archive author box template if it exists.
 		if ( '' !== locate_template( 'flagship/author-box-archive.php' ) ) {
 			return require_once locate_template( 'flagship/author-box-archive.php' );
 		}
