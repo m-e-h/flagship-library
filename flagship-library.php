@@ -73,7 +73,11 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'flagship-library' ), '1.0' );
+			_doing_it_wrong(
+				__FUNCTION__,
+				__( 'Cheatin&#8217; huh?', 'flagship-library' ),
+				'1.0.0'
+			);
 		}
 
 		/**
@@ -85,7 +89,11 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 */
 		public function __wakeup() {
 			// Unserializing instances of the class is forbidden
-			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'flagship-library' ), '1.0' );
+			_doing_it_wrong(
+				__FUNCTION__,
+				__( 'Cheatin&#8217; huh?', 'flagship-library' ),
+				'1.0.0'
+			);
 		}
 
 		/**
@@ -104,6 +112,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 				self::$instance = new Flagship_Library;
 				self::$instance->includes();
 				self::$instance->extensions_includes();
+				self::$instance->admin_includes();
 			}
 			return self::$instance;
 		}
@@ -226,6 +235,26 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			require_if_theme_supports( 'flagship-footer-widgets', $dir . 'footer-widgets/init.php' );
 		}
 
+		/**
+		 * Include admin library files.
+		 *
+		 * If for some reason you would prefer not to enable the admin features
+		 * in the library, they can be disabled using a filter like so:
+		 *
+		 * add_filter( 'flagship_library_disable_admin', '__return_true' );
+		 *
+		 * @since   1.0.0
+		 * @access  private
+		 * @return  void
+		 */
+		private function admin_includes() {
+			if ( ! is_admin() || apply_filters( 'flagship_library_disable_admin', false ) ) {
+				return;
+			}
+			$dir = trailingslashit( $this->get_library_directory() ) . 'admin/';
+			require_once $dir . 'tiny-mce.php';
+		}
+
 	}
 }
 
@@ -238,7 +267,8 @@ if ( ! function_exists( 'flagship_library' ) ) {
 	 *
 	 * <?php flagship_library()->is_customizer_preview(); ?>
 	 *
-	 * @version 1.2.1
+	 * @since   1.2.1
+	 * @version 1.3.0
 	 * @return  object Flagship_Library
 	 */
 	function flagship_library() {
