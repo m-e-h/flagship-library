@@ -230,9 +230,10 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 */
 		private function extensions_includes() {
 			$dir = trailingslashit( $this->get_library_directory() ) . 'extensions/';
-			require_if_theme_supports( 'site-logo', $dir . 'site-logo/init.php' );
-			require_if_theme_supports( 'breadcrumb-trail', $dir . 'breadcrumb-display/init.php' );
+			require_if_theme_supports( 'flagship-author-box',     $dir . 'author-box/init.php' );
+			require_if_theme_supports( 'breadcrumb-trail',        $dir . 'breadcrumb-display/init.php' );
 			require_if_theme_supports( 'flagship-footer-widgets', $dir . 'footer-widgets/init.php' );
+			require_if_theme_supports( 'site-logo',               $dir . 'site-logo/init.php' );
 		}
 
 		/**
