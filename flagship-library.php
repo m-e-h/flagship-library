@@ -38,28 +38,68 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		protected $prefix;
 
 		/**
+		 * Slashed directory path to load files.
+		 *
+		 * @since 1.4.0
+		 * @type  string
+		 */
+		protected $dir;
+
+		/**
+		 * Placeholder for our style builder class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Library
+		 */
+		public $style_builder;
+
+		/**
+		 * Placeholder for our author box class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Library
+		 */
+		public $author_box;
+
+		/**
+		 * Placeholder for our author box admin class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Library
+		 */
+		public $author_box_admin;
+
+		/**
+		 * Placeholder for our breadcrumb display class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Breadcrumb_Display
+		 */
+		public $breadcrumb_display;
+
+		/**
+		 * Placeholder for our footer widgets class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Footer_Widgets
+		 */
+		public $footer_widgets;
+
+		/**
+		 * Placeholder for our site logo class instance.
+		 *
+		 * @since 1.4.0
+		 * @var   Flagship_Site_Logo
+		 */
+		public $site_logo;
+
+		/**
 		 * Static placeholder for our main class instance.
 		 *
 		 * @since 1.1.0
 		 * @var   Flagship_Library
 		 */
 		private static $instance;
-
-		/**
-		 * Constructor method to initialize the class.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param array $args {
-		 *     Configuration options. Optional
-		 *
-		 *    @type string $prefix  Optional. Theme prefix. Defaults to the template name.
-		 *    @type array  $strings List of internationalized strings.
-		 * }
-		 */
-		public function __construct( $args = array() ) {
-			$this->prefix = empty( $args['prefix'] ) ? get_template() : sanitize_key( $args['prefix'] );
-		}
 
 		/**
 		 * Throw error on object clone
@@ -107,12 +147,18 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @uses   Flagship_Library::includes() Include the required files
 		 * @return Flagship_Library
 		 */
-		public static function instance() {
+		public static function instance( $args = array() ) {
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof Flagship_Library ) ) {
 				self::$instance = new Flagship_Library;
+				self::$instance->dir = trailingslashit( self::$instance->get_library_directory() );
+				self::$instance->prefix = empty( $args['prefix'] ) ? get_template() : sanitize_key( $args['prefix'] );
 				self::$instance->includes();
 				self::$instance->extensions_includes();
-				self::$instance->admin_includes();
+				self::$instance->instantiate();
+				if ( is_admin() ) {
+					self::$instance->admin_includes();
+					self::$instance->admin_instantiate();
+				}
 			}
 			return self::$instance;
 		}
@@ -212,12 +258,12 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 					'functions/template-entry.php',
 					'functions/template-general.php',
 					'functions/template.php',
-					'functions/utility.php',
+					'functions/deprecated.php',
 				)
 			);
 			// Include our library files.
 			foreach ( $includes as $include ) {
-				require_once trailingslashit( $this->get_library_directory() ) . $include;
+				require_once $this->dir . $include;
 			}
 		}
 
@@ -229,11 +275,38 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  void
 		 */
 		private function extensions_includes() {
-			$dir = trailingslashit( $this->get_library_directory() ) . 'extensions/';
-			require_if_theme_supports( 'flagship-author-box',     $dir . 'author-box/init.php' );
-			require_if_theme_supports( 'breadcrumb-trail',        $dir . 'breadcrumb-display/init.php' );
-			require_if_theme_supports( 'flagship-footer-widgets', $dir . 'footer-widgets/init.php' );
-			require_if_theme_supports( 'site-logo',               $dir . 'site-logo/init.php' );
+			if ( current_theme_supports( 'flagship-author-box' ) ) {
+				require_once $this->dir . 'classes/author-box.php';
+			}
+			if ( current_theme_supports( 'breadcrumb-trail' ) ) {
+				require_once $this->dir . 'classes/breadcrumb-display.php';
+			}
+			if ( current_theme_supports( 'flagship-footer-widgets' ) ) {
+				require_once $this->dir . 'classes/footer-widgets.php';
+			}
+			if ( current_theme_supports( 'site-logo' ) ) {
+				add_action( 'init', array( $this, 'logo_includes' ), 12 );
+			}
+		}
+
+		/**
+		 * Activate the Flagship Logo plugin. We need to hook into init in order
+		 * to check for the Jetpack/Automattic version of the logo uploader.
+		 *
+		 * @since  1.4.0
+		 * @uses   current_theme_supports()
+		 * @return void
+		 */
+		function logo_includes() {
+			// Return early if the standalone plugin and/or Jetpack module is activated.
+			if ( class_exists( 'Site_Logo', false ) ) {
+				return;
+			}
+			require_once $this->dir . 'classes/site-logo.php';
+			if ( ! $this->is_customizer_preview() ) {
+				return;
+			}
+			require_once $this->dir . 'customizer/controls/site-logo-control.php';
 		}
 
 		/**
@@ -249,11 +322,69 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @return  void
 		 */
 		private function admin_includes() {
-			if ( ! is_admin() || apply_filters( 'flagship_library_disable_admin', false ) ) {
+			if ( apply_filters( 'flagship_library_disable_admin', false ) ) {
 				return;
 			}
-			$dir = trailingslashit( $this->get_library_directory() ) . 'admin/';
-			require_once $dir . 'tiny-mce.php';
+			require_once $this->dir . 'admin/functions/tiny-mce.php';
+			if ( current_theme_supports( 'flagship-author-box' ) ) {
+				require_once $this->dir . 'admin/classes/author-box.php';
+			}
+		}
+
+		/**
+		* Spin up instances of our front-end classes once they've been included.
+		 *
+		 * @since   1.4.0
+		 * @access  private
+		 * @return  void
+		 */
+		private function instantiate() {
+			$this->style_builder = new Flagship_Style_Builder;
+
+			if ( class_exists( 'Flagship_Author_Box', false ) ) {
+				$this->author_box = new Flagship_Author_Box;
+				$this->author_box->run();
+			}
+			if ( class_exists( 'Flagship_Breadcrumb_Display', false ) ) {
+				$this->breadcrumb_display = new Flagship_Breadcrumb_Display;
+				$this->breadcrumb_display->run();
+			}
+			if ( class_exists( 'Flagship_Footer_Widgets', false ) ) {
+				$this->footer_widgets = new Flagship_Footer_Widgets;
+				$this->footer_widgets->run();
+			}
+			add_action( 'init', array( $this, 'instantiate_logo' ), 13 );
+		}
+
+		/**
+		 * Because the Automattic and Jetpack Site Logo feature is hooked into
+		 * init, we need to hook in a little later to add our functionality. If
+		 * one of the other plugins is detected we'll just return.
+		 *
+		 * @since  1.4.0
+		 * @uses   Flagship_Site_Logo::run()
+		 * @return object Site_Logo
+		 */
+		function instantiate_logo() {
+			if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+				return;
+			}
+			$this->site_logo = new Flagship_Site_Logo;
+			$this->site_logo->run();
+		}
+
+		/**
+		 * Spin up instances of our admin classes once they've been included.
+		 *
+		 * @since   1.4.0
+		 * @access  private
+		 * @return  void
+		 */
+		private function admin_instantiate() {
+			if ( class_exists( 'Flagship_Author_Box_Admin', false ) ) {
+				$this->author_box_admin = new Flagship_Author_Box_Admin;
+				$this->author_box_admin->run();
+			}
 		}
 
 	}
