@@ -46,6 +46,71 @@ function flagship_load_favicon() {
 }
 
 /**
+ * Retrieve the site logo URL or ID (URL by default). Pass in the string
+ * 'id' for ID.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::get_flagship_logo
+ * @param  string $format the format to return
+ * @return mixed The URL or ID of our site logo, false if not set
+ */
+function flagship_get_logo( $format = 'url' ) {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			return jetpack_get_site_logo( $format );
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			return get_site_logo( $format );
+		}
+		return null;
+	}
+	return flagship_library()->site_logo->get_flagship_logo( $format );
+}
+
+/**
+ * Determine if a site logo is assigned or not.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::has_site_logo
+ * @return boolean True if there is an active logo, false otherwise
+ */
+function flagship_has_logo() {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			return jetpack_has_site_logo();
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			return has_site_logo();
+		}
+		return null;
+	}
+	return flagship_library()->site_logo->has_site_logo();
+}
+
+/**
+ * Output an <img> tag of the site logo, at the size specified
+ * in the theme's add_theme_support() declaration.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::the_site_logo
+ * @return void
+ */
+function flagship_the_logo() {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			jetpack_the_site_logo();
+			return;
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			the_site_logo();
+			return;
+		}
+		return;
+	}
+	flagship_library()->site_logo->the_site_logo();
+}
+
+/**
  * Sets a common class, `.nav-menu`, for the custom menu widget if used as part
  * of a site navigation element.
  *
@@ -94,6 +159,43 @@ add_filter( 'get_search_form', 'flagship_get_search_form' );
 function flagship_get_search_form() {
 	$search = new Flagship_Search_Form;
 	return $search->get_form();
+}
+
+/**
+ * Display our breadcrumbs based on selections made in the WordPress customizer.
+ *
+ * @since  1.1.0
+ * @access public
+ * @return bool true if both our template tag and theme mod return true.
+ */
+function flagship_display_breadcrumbs() {
+	$breadcrumbs = flagship_library()->breadcrumb_display;
+	// Return early if our theme doesn't support breadcrumbs.
+	if ( ! is_object( $breadcrumbs ) ) {
+		return false;
+	}
+	// Grab our available breadcrumb display options.
+	$options = array_keys( $breadcrumbs->get_options() );
+	// Set up an array of template tags to map to our breadcrumb display options.
+	$tags = apply_filters( 'flagship_breadcrumb_tags',
+		array(
+			is_singular() && ! is_attachment() && ! is_page(),
+			is_page(),
+			is_home() && ! is_front_page(),
+			is_archive(),
+			is_404(),
+			is_attachment(),
+		)
+	);
+
+	// Loop through our theme mods to see if we have a match.
+	foreach ( array_combine( $options, $tags ) as $mod => $tag ) {
+		// Return true if we find an enabled theme mod within the correct section.
+		if ( 1 === absint( get_theme_mod( $mod, 0 ) ) && true === $tag ) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -319,20 +421,4 @@ function flagship_get_credit_link() {
 		'Flagship'
 	);
 	return apply_filters( 'flagship_credit_link', $link );
-}
-
-/**
- * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
- * header right sidebar.
- *
- * @deprecated This is no longer recommended. Use flagship_widget_menu_args instead.
- *
- * @since  1.0.0
- * @access public
- * @param  array $args Header menu args.
- * @return array $args Modified header menu args.
- */
-function flagship_header_menu_args( $args ) {
-	_deprecated_function( __FUNCTION__, '1.3.0', 'flagship_widget_menu_args' );
-	return flagship_widget_menu_args( $args );
 }
