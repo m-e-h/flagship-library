@@ -15,7 +15,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 	/**
 	 * Class for common Flagship theme functionality.
 	 *
-	 * @version 1.2.1
+	 * @version 1.3.0
 	 */
 	class Flagship_Library {
 
@@ -250,7 +250,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			// Set up an array of library file paths which can be filtered.
 			$includes = apply_filters( 'flagship_library_includes',
 				array(
-					'classes/customizer-base.php',
+					'customizer/classes/customizer-base.php',
 					'classes/search-form.php',
 					'classes/style-builder.php',
 					'functions/attr.php',
@@ -279,7 +279,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 				require_once $this->dir . 'classes/author-box.php';
 			}
 			if ( current_theme_supports( 'breadcrumb-trail' ) ) {
-				require_once $this->dir . 'classes/breadcrumb-display.php';
+				require_once $this->dir . 'customizer/classes/breadcrumb-display.php';
 			}
 			if ( current_theme_supports( 'flagship-footer-widgets' ) ) {
 				require_once $this->dir . 'classes/footer-widgets.php';
@@ -302,7 +302,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			if ( class_exists( 'Site_Logo', false ) ) {
 				return;
 			}
-			require_once $this->dir . 'classes/site-logo.php';
+			require_once $this->dir . 'customizer/classes/site-logo.php';
 			if ( ! $this->is_customizer_preview() ) {
 				return;
 			}
