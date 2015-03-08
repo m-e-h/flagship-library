@@ -19,15 +19,14 @@ add_action( 'init', 'flaghip_logo_init', 12 );
  * @return void
  */
 function flaghip_logo_init() {
-	$dir = trailingslashit( dirname( __FILE__ ) );
-	// Always include our template tags if our theme has declared support.
-	require_once $dir . 'includes/template-tags.php';
-
 	// Return early if the standalone plugin and/or Jetpack module is activated.
 	if ( class_exists( 'Site_Logo', false ) ) {
 		return;
 	}
+	$dir = trailingslashit( dirname( __FILE__ ) );
+
 	require_once $dir . 'classes/site-logo.php';
+
 	if ( flagship_library()->is_customizer_preview() ) {
 		require_once $dir . 'classes/site-logo-control.php';
 	}
