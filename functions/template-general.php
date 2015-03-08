@@ -379,7 +379,7 @@ function flagship_get_customizer_link( $args = array() ) {
 		'return'       => get_permalink(),
 	);
 
-	$args = wp_parse_args( $defaults, $args );
+	$args = wp_parse_args( $args, $defaults );
 
 	$query_args = array();
 	$type       = $args['focus_type'];
