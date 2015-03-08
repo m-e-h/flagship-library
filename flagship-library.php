@@ -306,7 +306,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 			if ( ! $this->is_customizer_preview() ) {
 				return;
 			}
-			require_once $this->dir . 'customizer/controls/site-logo-control.php';
+			require_once $this->dir . 'customizer/controls/site-logo.php';
 		}
 
 		/**
