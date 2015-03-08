@@ -77,29 +77,27 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 		$wp_customize->get_section( 'title_tagline' )->title = __( 'Site Title, Tagline, and Logo', 'flagship-library' );
 
 		// Add a setting to hide header text if the theme isn't supporting the feature itself
-		if ( ! current_theme_supports( 'custom-header' ) ) {
-			$wp_customize->add_setting(
+		$wp_customize->add_setting(
+			'site_logo_header_text',
+			array(
+				'default'           => 1,
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+				'transport'         => 'postMessage',
+			)
+		);
+
+		$wp_customize->add_control(
+			new WP_Customize_Control(
+				$wp_customize,
 				'site_logo_header_text',
 				array(
-					'default'           => 1,
-					'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
-					'transport'         => 'postMessage',
+					'label'    => __( 'Display Header Text', 'flagship-library' ),
+					'section'  => 'title_tagline',
+					'settings' => 'site_logo_header_text',
+					'type'     => 'checkbox',
 				)
-			);
-
-			$wp_customize->add_control(
-				new WP_Customize_Control(
-					$wp_customize,
-					'site_logo_header_text',
-					array(
-						'label'    => __( 'Display Header Text', 'flagship-library' ),
-						'section'  => 'title_tagline',
-						'settings' => 'site_logo_header_text',
-						'type'     => 'checkbox',
-					)
-				)
-			);
-		}
+			)
+		);
 
 		// Add the setting for our logo value.
 		$wp_customize->add_setting(
@@ -186,7 +184,7 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 * @return $attr array the modified attributes
 	 */
 	public function hide_text( $attr ) {
-		$attr['class'] = 'screen-reader-text';
+		$attr['class'] = isset( $attr['class'] ) ? $attr['class'] .= ' screen-reader-text' : 'screen-reader-text';
 		return $attr;
 	}
 
