@@ -10,9 +10,9 @@
  * @since       1.4.0
  */
 ?>
-<h3><?php _e( 'Author Box Settings', 'flagship' ); ?></h3>
+<h3><?php _e( 'Author Box Settings', 'flagship-library' ); ?></h3>
 
-<p><span class="description"><?php _e( 'Choose where you would like to display an author box.', 'flagship' ); ?></span></p>
+<p><span class="description"><?php _e( 'Choose where you would like to display an author box.', 'flagship-library' ); ?></span></p>
 
 <table class="form-table">
 	<tbody>
@@ -20,12 +20,12 @@
 			<td>
 				<label for="meta[flagship_author_box_single]">
 					<input id="meta[flagship_author_box_single]" name="meta[flagship_author_box_single]" type="checkbox" value="1" <?php checked( $single_box ); ?> />
-					<?php _e( 'Enable Author Box on this User\'s Posts?', 'flagship' ); ?>
+					<?php _e( 'Enable Author Box on this User\'s Posts?', 'flagship-library' ); ?>
 				</label><br />
 
 				<label for="meta[flagship_author_box_archive]">
 					<input id="meta[flagship_author_box_archive]" name="meta[flagship_author_box_archive]" type="checkbox" value="1" <?php checked( $author_box ); ?> />
-					<?php _e( 'Enable Author Box on this User\'s Archives?', 'flagship' ); ?>
+					<?php _e( 'Enable Author Box on this User\'s Archives?', 'flagship-library' ); ?>
 				</label>
 			</td>
 		</tr>
