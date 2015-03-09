@@ -61,18 +61,18 @@ function flagship_tiny_mce_formats( $args ) {
 			array(
 				'title'    => __( 'Drop Cap', 'flagship-library' ),
 				'inline'   => 'span',
-				'classes'  => 'drop-cap',
+				'classes'  => 'dropcap',
 			),
 			array(
 				'title'    => __( 'Pull Quote Left', 'flagship-library' ),
 				'block'    => 'blockquote',
-				'classes'  => 'pull-quote alignleft',
+				'classes'  => 'pullquote alignleft',
 				'wrapper'  => true,
 			),
 			array(
 				'title'    => __( 'Pull Quote Right', 'flagship-library' ),
 				'block'    => 'blockquote',
-				'classes'  => 'pull-quote alignright',
+				'classes'  => 'pullquote alignright',
 				'wrapper'  => true,
 			),
 			array(
