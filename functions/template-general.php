@@ -133,7 +133,7 @@ function flagship_widget_menu_args( $args ) {
  * @return string $menu Modified menu output.
  */
 function flagship_widget_menu_wrap( $menu, $context = '' ) {
-	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', $context ) ) . $menu . '</nav>';
+	return sprintf( '<nav %s>', hybrid_get_attr( 'menu', $context ) ) . $menu . '</nav>';
 }
 
 /**
