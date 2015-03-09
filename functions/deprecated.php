@@ -25,6 +25,7 @@
  * @return  object Flagship_Style_Builder
  */
 function flagship_style_builder() {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
 	return flagship_library()->style_builder;
 }
 
@@ -55,6 +56,7 @@ function flagship_header_menu_args( $args ) {
  * @return object Flagship_Breadcrumb_Display
  */
 function flagship_breadcrumb_display() {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
 	return flagship_library()->breadcrumb_display;
 }
 
@@ -70,6 +72,7 @@ function flagship_breadcrumb_display() {
  * @return object Flagship_Site_Logo
  */
 function flagship_site_logo() {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
 	return flagship_library()->site_logo;
 }
 
@@ -98,6 +101,7 @@ function flagship_logo_class_loader() {}
  * @return object Flagship_Footer_Widgets
  */
 function flagship_footer_widgets() {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
 	return flagship_library()->footer_widgets;
 }
 
@@ -110,3 +114,89 @@ function flagship_footer_widgets() {
  * @return null
  */
 function flagship_register_footer_widget_areas() {}
+
+/**
+ * Page <header> element attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_header_class( $attr ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return $attr;
+}
+
+/**
+ * Page <footer> element attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_footer_class( $attr ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return $attr;
+}
+
+add_filter( 'hybrid_attr_widget-menu', 'flagship_attr_widget_menu', 10, 2 );
+/**
+ * Widget nav menu attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @param  string $context
+ * @return array
+ */
+function flagship_attr_widget_menu( $attr, $context ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return hybrid_get_attr( 'menu', $context );
+}
+
+/**
+ * Branding (usually a wrapper for title and tagline) attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_branding_class( $attr ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return $attr;
+}
+
+/**
+ * Site title attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_site_title_class( $attr ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return $attr;
+}
+
+/**
+ * Site description attributes.
+ *
+ * @deprecated 1.4.0
+ * @since  1.0.0
+ * @access public
+ * @param  array $attr
+ * @return array
+ */
+function flagship_attr_site_desc_class( $attr ) {
+	_deprecated_function( __FUNCTION__, '1.4.0' );
+	return $attr;
+}

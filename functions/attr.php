@@ -16,36 +16,16 @@
  */
 
 // Attributes for major structural elements.
-add_filter( 'hybrid_attr_header',           'flagship_attr_header_class' );
 add_filter( 'hybrid_attr_site-container',   'flagship_attr_site_container' );
 add_filter( 'hybrid_attr_site-inner',       'flagship_attr_site_inner' );
 add_filter( 'hybrid_attr_wrap',             'flagship_attr_wrap', 10, 2 );
-add_filter( 'hybrid_attr_footer',           'flagship_attr_footer_class' );
 add_filter( 'hybrid_attr_sidebar',          'flagship_attr_sidebar_class', 10, 2 );
 add_filter( 'hybrid_attr_menu',             'flagship_attr_menu_class', 10, 2 );
-add_filter( 'hybrid_attr_widget-menu',      'flagship_attr_widget_menu', 10, 2 );
 add_filter( 'nav_menu_link_attributes',     'flagship_add_menu_atts', 10, 3 );
-// Header attributes.
-add_filter( 'hybrid_attr_branding',         'flagship_attr_branding_class' );
-add_filter( 'hybrid_attr_site-title',       'flagship_attr_site_title_class' );
-add_filter( 'hybrid_attr_site-description', 'flagship_attr_site_desc_class' );
 // Post-specific attributes.
 add_filter( 'hybrid_attr_entry-summary',    'flagship_attr_entry_summary_class' );
 // Other attributes.
 add_filter( 'hybrid_attr_nav',              'flagship_attr_nav', 10, 2 );
-
-/**
- * Page <header> element attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_header_class( $attr ) {
-	$attr['class'] = 'header';
-	return $attr;
-}
 
 /**
  * Page site container element attributes.
@@ -92,19 +72,6 @@ function flagship_attr_wrap( $attr, $context ) {
 }
 
 /**
- * Page <footer> element attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_footer_class( $attr ) {
-	$attr['class'] = 'footer';
-	return $attr;
-}
-
-/**
  * Sidebar attributes.
  *
  * @since  1.0.0
@@ -114,11 +81,10 @@ function flagship_attr_footer_class( $attr ) {
  * @return array
  */
 function flagship_attr_sidebar_class( $attr, $context ) {
-	$class = 'sidebar';
-	if ( ! empty( $context ) ) {
-		$class .= " sidebar-{$context}";
+	if ( empty( $context ) ) {
+		return $attr;
 	}
-	$attr['class'] = $class;
+	$attr['class'] .= " sidebar-{$context}";
 	return $attr;
 }
 
@@ -140,37 +106,6 @@ function flagship_attr_menu_class( $attr, $context ) {
 }
 
 /**
- * Widget nav menu attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @param  string $context
- * @return array
- */
-function flagship_attr_widget_menu( $attr, $context ) {
-	$class = 'menu';
-
-	if ( ! empty( $context ) ) {
-		$attr['id'] = "menu-{$context}";
-		$class    .= " menu-{$context}";
-	}
-
-	$attr['class'] = $class;
-	$attr['role']  = 'navigation';
-
-	if ( ! empty( $context ) ) {
-		// Translators: The %s is the menu name. This is used for the 'aria-label' attribute.
-		$attr['aria-label'] = esc_attr( sprintf( _x( '%s Menu', 'nav menu aria label', 'flagship-library' ), ucwords( $context ) ) );
-	}
-
-	$attr['itemscope']  = 'itemscope';
-	$attr['itemtype']   = 'http://schema.org/SiteNavigationElement';
-
-	return $attr;
-}
-
-/**
  * Add URL itemprop to WordPress menu items.
  *
  * @since  1.3.1
@@ -185,45 +120,6 @@ function flagship_add_menu_atts( $atts, $item, $args ) {
 	}
 	$atts['itemprop'] = 'url';
 	return $atts;
-}
-
-/**
- * Branding (usually a wrapper for title and tagline) attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_branding_class( $attr ) {
-	$attr['class'] = 'branding';
-	return $attr;
-}
-
-/**
- * Site title attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_site_title_class( $attr ) {
-	$attr['class'] = 'site-title';
-	return $attr;
-}
-
-/**
- * Site description attributes.
- *
- * @since  1.0.0
- * @access public
- * @param  array $attr
- * @return array
- */
-function flagship_attr_site_desc_class( $attr ) {
-	$attr['class'] = 'site-description';
-	return $attr;
 }
 
 /**
