@@ -76,7 +76,12 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 		//Update the Customizer section title for discoverability.
 		$wp_customize->get_section( 'title_tagline' )->title = __( 'Site Title, Tagline, and Logo', 'flagship-library' );
 
-		// Add a setting to hide header text if the theme isn't supporting the feature itself
+		// Disable the display header text control from the custom header feature.
+		if ( current_theme_supports( 'custom-header' ) ) {
+			$wp_customize->remove_control( 'display_header_text' );
+		}
+
+		// Add a setting to hide header text.
 		$wp_customize->add_setting(
 			'site_logo_header_text',
 			array(
