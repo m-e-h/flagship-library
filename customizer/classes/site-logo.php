@@ -76,33 +76,30 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 		//Update the Customizer section title for discoverability.
 		$wp_customize->get_section( 'title_tagline' )->title = __( 'Site Title, Tagline, and Logo', 'flagship-library' );
 
-		// Disable the display header text control from the custom header feature.
-		if ( current_theme_supports( 'custom-header' ) ) {
-			$wp_customize->remove_control( 'display_header_text' );
-		}
-
-		// Add a setting to hide header text.
-		$wp_customize->add_setting(
-			'site_logo_header_text',
-			array(
-				'default'           => 1,
-				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
-				'transport'         => 'postMessage',
-			)
-		);
-
-		$wp_customize->add_control(
-			new WP_Customize_Control(
-				$wp_customize,
+		// Add a setting to hide header text if Custom Header isn't supported.
+		if ( ! current_theme_supports( 'custom-header' ) ) {
+			$wp_customize->add_setting(
 				'site_logo_header_text',
 				array(
-					'label'    => __( 'Display Header Text', 'flagship-library' ),
-					'section'  => 'title_tagline',
-					'settings' => 'site_logo_header_text',
-					'type'     => 'checkbox',
+					'default'           => 1,
+					'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+					'transport'         => 'postMessage',
 				)
-			)
-		);
+			);
+
+			$wp_customize->add_control(
+				new WP_Customize_Control(
+					$wp_customize,
+					'site_logo_header_text',
+					array(
+						'label'    => __( 'Display Header Text', 'flagship-library' ),
+						'section'  => 'title_tagline',
+						'settings' => 'site_logo_header_text',
+						'type'     => 'checkbox',
+					)
+				)
+			);
+		}
 
 		// Add the setting for our logo value.
 		$wp_customize->add_setting(
@@ -153,13 +150,16 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 			'',
 			true
 		);
-		wp_enqueue_script(
-			'site-logo-header-text',
-			esc_url( $assets_uri ) . 'js/site-logo/header-text.js',
-			array( 'media-views' ),
-			'',
-			true
-		);
+
+		if ( ! current_theme_supports( 'custom-header' ) ) {
+			wp_enqueue_script(
+				'site-logo-header-text',
+				esc_url( $assets_uri ) . 'js/site-logo/header-text.js',
+				array( 'media-views' ),
+				'',
+				true
+			);
+		}
 	}
 
 	/**
@@ -172,7 +172,7 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 */
 	public function head_text_styles() {
 		// Bail if our text isn't hidden.
-		if ( get_theme_mod( 'site_logo_header_text', 1 ) ) {
+		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 1 ) ) {
 			return;
 		}
 		// hide our header text if display Header Text is unchecked.
