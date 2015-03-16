@@ -1,24 +1,15 @@
-/* global site_logo_header_classes */
 /**
  * JS for handling the "Display Header Text" setting's realtime preview.
  */
-(function($){
-	var api     = wp.customize,
-		classes = '.site-title, .site-description';
+( function( $ ) {
+	'use strict';
+
+	var api      = wp.customize,
+		$ids = $( '#site-title, #site-description' );
 
 	api( 'site_logo_header_text', function( value ) {
-		value.bind( function( to ) {
-			if ( true === to ) {
-				$( classes ).css({
-					'position': 'static',
-					'clip': 'auto'
-				});
-			} else {
-				$( classes ).css({
-					'position': 'absolute',
-					'clip': 'rect(1px 1px 1px 1px)'
-				});
-			}
+		value.bind( function() {
+			$ids.toggleClass( 'screen-reader-text' );
 		});
 	});
 })(jQuery);

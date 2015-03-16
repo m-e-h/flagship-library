@@ -53,7 +53,7 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 * @uses add_filter
 	 */
 	protected function wp_hooks() {
-		add_action( 'wp_head',                 array( $this, 'head_text_styles' ) );
+		add_action( 'tha_body_top',            array( $this, 'head_text_styles' ) );
 		add_action( 'delete_attachment',       array( $this, 'reset_on_attachment_delete' ) );
 		add_filter( 'body_class',              array( $this, 'body_classes' ) );
 		add_filter( 'image_size_names_choose', array( $this, 'media_manager_image_sizes' ) );
@@ -76,30 +76,33 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 		//Update the Customizer section title for discoverability.
 		$wp_customize->get_section( 'title_tagline' )->title = __( 'Site Title, Tagline, and Logo', 'flagship-library' );
 
-		// Add a setting to hide header text if the theme isn't supporting the feature itself
-		if ( ! current_theme_supports( 'custom-header' ) ) {
-			$wp_customize->add_setting(
+		// Disable the display header text control from the custom header feature.
+		if ( current_theme_supports( 'custom-header' ) ) {
+			$wp_customize->remove_control( 'display_header_text' );
+		}
+
+		// Add a setting to hide header text.
+		$wp_customize->add_setting(
+			'site_logo_header_text',
+			array(
+				'default'           => 1,
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+				'transport'         => 'postMessage',
+			)
+		);
+
+		$wp_customize->add_control(
+			new WP_Customize_Control(
+				$wp_customize,
 				'site_logo_header_text',
 				array(
-					'default'           => 1,
-					'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
-					'transport'         => 'postMessage',
+					'label'    => __( 'Display Header Text', 'flagship-library' ),
+					'section'  => 'title_tagline',
+					'settings' => 'site_logo_header_text',
+					'type'     => 'checkbox',
 				)
-			);
-
-			$wp_customize->add_control(
-				new WP_Customize_Control(
-					$wp_customize,
-					'site_logo_header_text',
-					array(
-						'label'    => __( 'Display Header Text', 'flagship-library' ),
-						'section'  => 'title_tagline',
-						'settings' => 'site_logo_header_text',
-						'type'     => 'checkbox',
-					)
-				)
-			);
-		}
+			)
+		);
 
 		// Add the setting for our logo value.
 		$wp_customize->add_setting(
@@ -168,22 +171,26 @@ class Flagship_Site_Logo extends Flagship_Customizer_Base {
 	 * @uses esc_html()
 	 */
 	public function head_text_styles() {
-		// Bail if our theme supports custom headers or  header text isn't hidden.
-		if ( current_theme_supports( 'custom-header' ) || get_theme_mod( 'site_logo_header_text', 1 ) ) {
+		// Bail if our text isn't hidden.
+		if ( get_theme_mod( 'site_logo_header_text', 1 ) ) {
 			return;
 		}
-
 		// hide our header text if display Header Text is unchecked.
-		?>
-		<!-- Site Logo: hide header text -->
-		<style type="text/css">
-			.site-title,
-			.site-description {
-				clip: rect(1px, 1px, 1px, 1px);
-				position: absolute;
-			}
-		</style>
-		<?php
+		add_filter( 'hybrid_attr_site-title',       array( $this, 'hide_text' ) );
+		add_filter( 'hybrid_attr_site-description', array( $this, 'hide_text' ) );
+	}
+
+	/**
+	 * Filter the attributes of our site title and description to hide them.
+	 *
+	 * @since  1.4.0
+	 * @access public
+	 * @param  $attr array the current attributes
+	 * @return $attr array the modified attributes
+	 */
+	public function hide_text( $attr ) {
+		$attr['class'] = isset( $attr['class'] ) ? $attr['class'] .= ' screen-reader-text' : 'screen-reader-text';
+		return $attr;
 	}
 
 	/**

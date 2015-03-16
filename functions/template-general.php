@@ -25,13 +25,13 @@ function flagship_load_favicon() {
 	$favicon = '';
 	$path    = 'images/favicon.ico';
 
-	// Use the child theme favicon if it exists.
-	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $path ) ) {
-		$favicon = trailingslashit( get_stylesheet_directory_uri() ) . $path;
-	}
 	// Fall back to the parent favicon if it exists.
 	if ( file_exists( trailingslashit( get_template_directory() ) . $path ) ) {
 		$favicon = trailingslashit( get_template_directory_uri() ) . $path;
+	}
+	// Use the child theme favicon if it exists.
+	if ( file_exists( trailingslashit( get_stylesheet_directory() ) . $path ) ) {
+		$favicon = trailingslashit( get_stylesheet_directory_uri() ) . $path;
 	}
 
 	// Allow developers to set a custom favicon file.
@@ -43,6 +43,71 @@ function flagship_load_favicon() {
 	}
 
 	echo '<link rel="Shortcut Icon" href="' . esc_url( $favicon ) . '" type="image/x-icon" />' . "\n";
+}
+
+/**
+ * Retrieve the site logo URL or ID (URL by default). Pass in the string
+ * 'id' for ID.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::get_flagship_logo
+ * @param  string $format the format to return
+ * @return mixed The URL or ID of our site logo, false if not set
+ */
+function flagship_get_logo( $format = 'url' ) {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			return jetpack_get_site_logo( $format );
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			return get_site_logo( $format );
+		}
+		return null;
+	}
+	return flagship_library()->site_logo->get_flagship_logo( $format );
+}
+
+/**
+ * Determine if a site logo is assigned or not.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::has_site_logo
+ * @return boolean True if there is an active logo, false otherwise
+ */
+function flagship_has_logo() {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			return jetpack_has_site_logo();
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			return has_site_logo();
+		}
+		return null;
+	}
+	return flagship_library()->site_logo->has_site_logo();
+}
+
+/**
+ * Output an <img> tag of the site logo, at the size specified
+ * in the theme's add_theme_support() declaration.
+ *
+ * @since  1.1.0
+ * @uses   Flagship_Site_Logo::the_site_logo
+ * @return void
+ */
+function flagship_the_logo() {
+	if ( ! class_exists( 'Flagship_Site_Logo', false ) ) {
+		if ( function_exists( 'jetpack_the_site_logo' ) ) {
+			jetpack_the_site_logo();
+			return;
+		}
+		if ( function_exists( 'the_site_logo' ) ) {
+			the_site_logo();
+			return;
+		}
+		return;
+	}
+	flagship_library()->site_logo->the_site_logo();
 }
 
 /**
@@ -68,7 +133,7 @@ function flagship_widget_menu_args( $args ) {
  * @return string $menu Modified menu output.
  */
 function flagship_widget_menu_wrap( $menu, $context = '' ) {
-	return sprintf( '<nav %s>', hybrid_get_attr( 'widget-menu', $context ) ) . $menu . '</nav>';
+	return sprintf( '<nav %s>', hybrid_get_attr( 'menu', $context ) ) . $menu . '</nav>';
 }
 
 /**
@@ -94,6 +159,43 @@ add_filter( 'get_search_form', 'flagship_get_search_form' );
 function flagship_get_search_form() {
 	$search = new Flagship_Search_Form;
 	return $search->get_form();
+}
+
+/**
+ * Display our breadcrumbs based on selections made in the WordPress customizer.
+ *
+ * @since  1.1.0
+ * @access public
+ * @return bool true if both our template tag and theme mod return true.
+ */
+function flagship_display_breadcrumbs() {
+	$breadcrumbs = flagship_library()->breadcrumb_display;
+	// Return early if our theme doesn't support breadcrumbs.
+	if ( ! is_object( $breadcrumbs ) ) {
+		return false;
+	}
+	// Grab our available breadcrumb display options.
+	$options = array_keys( $breadcrumbs->get_options() );
+	// Set up an array of template tags to map to our breadcrumb display options.
+	$tags = apply_filters( 'flagship_breadcrumb_tags',
+		array(
+			is_singular() && ! is_attachment() && ! is_page(),
+			is_page(),
+			is_home() && ! is_front_page(),
+			is_archive(),
+			is_404(),
+			is_attachment(),
+		)
+	);
+
+	// Loop through our theme mods to see if we have a match.
+	foreach ( array_combine( $options, $tags ) as $mod => $tag ) {
+		// Return true if we find an enabled theme mod within the correct section.
+		if ( 1 === absint( get_theme_mod( $mod, 0 ) ) && true === $tag ) {
+			return true;
+		}
+	}
+	return false;
 }
 
 /**
@@ -132,8 +234,8 @@ function flagship_get_post_navigation( $args = array() ) {
 			'post_types'     => array(),
 			'prev_format'    => '<span class="nav-previous">%link</span>',
 			'next_format'    => '<span class="nav-next">%link</span>',
-			'prev_text'      => __( 'Previous', 'flagship' ) . esc_attr( $name ),
-			'next_text'      => __( 'Next', 'flagship' ) . esc_attr( $name ),
+			'prev_text'      => __( 'Previous', 'flagship-library' ) . esc_attr( $name ),
+			'next_text'      => __( 'Next', 'flagship-library' ) . esc_attr( $name ),
 			'in_same_term'   => false,
 			'excluded_terms' => '',
 			'taxonomy'       => 'category',
@@ -217,10 +319,10 @@ function flagship_get_posts_navigation( $args = array() ) {
 	$defaults = apply_filters( 'flagship_loop_nav_defaults',
 		array(
 			'format'         => 'pagination',
-			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship' ) ),
-			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship' ) ),
-			'prev_link_text' => __( 'Newer Posts', 'flagship' ),
-			'next_link_text' => __( 'Older Posts', 'flagship' ),
+			'prev_text'      => sprintf( '<span class="screen-reader-text">%s</span>' , __( 'Previous Page', 'flagship-library' ) ),
+			'next_text'      => sprintf( '<span class="screen-reader-text">%s</span>', __( 'Next Page', 'flagship-library' ) ),
+			'prev_link_text' => __( 'Newer Posts', 'flagship-library' ),
+			'next_link_text' => __( 'Older Posts', 'flagship-library' ),
 		)
 	);
 
@@ -246,6 +348,66 @@ function flagship_get_posts_navigation( $args = array() ) {
 }
 
 /**
+ * Display a link to the customizer panel.
+ *
+ * @since  1.4.0
+ * @access public
+ * @param  $args array options for how the link will be formatted
+ * @return void
+ */
+function flagship_customizer_link( $args = array() ) {
+	echo flagship_get_customizer_link( $args );
+}
+
+/**
+ * Format a link to the customizer panel.
+ *
+ * Since WordPress 4.1, the customizer panel allows for deeplinking, but setting
+ * up a link can be rather tedious. This function wraps the query args required
+ * to deep link to a customzer panel or control, plus return to the correct page
+ * when the customizer is exited by the user.
+ *
+ * @since  1.4.0
+ * @access public
+ * @param  $args array options for how the link will be formatted
+ * @return string an escaped link to the WordPress customizer panel.
+ */
+function flagship_get_customizer_link( $args = array() ) {
+	$defaults = array(
+		'focus_type'   => 'panel',
+		'focus_target' => 'widgets',
+		'return'       => get_permalink(),
+	);
+
+	$args = wp_parse_args( $args, $defaults );
+
+	$query_args = array();
+	$type       = $args['focus_type'];
+	$target     = $args['focus_target'];
+	$return     = $args['return'];
+
+	if ( ! empty( $type ) && ! empty( $target ) ) {
+		$query_args[] = array( 'autofocus' => array( $type => $target, ), );
+	}
+	if ( ! empty( $return ) ) {
+		$query_args['return'] = urlencode( wp_unslash( $return ) );
+	}
+
+	return esc_url( add_query_arg( $query_args, admin_url( 'customize.php' ) ) );
+}
+
+/**
+ * Returns a formatted theme credit link.
+ *
+ * @since  1.1.0
+ * @access public
+ * @return string
+ */
+function flagship_credit_link() {
+	echo flagship_get_credit_link();
+}
+
+/**
  * Returns a formatted theme credit link.
  *
  * @since  1.1.0
@@ -253,28 +415,10 @@ function flagship_get_posts_navigation( $args = array() ) {
  * @return string
  */
 function flagship_get_credit_link() {
-	$theme = wp_get_theme( get_template() );
-	$uri   = $theme->get( 'AuthorURI' );
-	$name  = $theme->display( 'Author', false, true );
-
-	// Translators: Theme name.
-	$title = sprintf( __( 'Purpose-Built WordPress Theme by %s', 'flagship-library' ), $name );
-
-	return sprintf( '<a class="author-link" href="%s" title="%s">%s</a>', esc_url( $uri ), esc_attr( $title ), $name );
-}
-
-/**
- * Sets a common class, `.nav-menu`, for the custom menu widget if used in the
- * header right sidebar.
- *
- * @deprecated This is no longer recommended. Use flagship_widget_menu_args instead.
- *
- * @since  1.0.0
- * @access public
- * @param  array $args Header menu args.
- * @return array $args Modified header menu args.
- */
-function flagship_header_menu_args( $args ) {
-	_deprecated_function( __FUNCTION__, '1.3.0', 'flagship_widget_menu_args' );
-	return flagship_widget_menu_args( $args );
+	$link = sprintf( '<a class="author-link" href="%s" title="%s">%s</a>',
+		'https://flagshipwp.com',
+		__( 'Purpose-Built WordPress Theme by', 'flagship-library' ) . ' Flagship',
+		'Flagship'
+	);
+	return apply_filters( 'flagship_credit_link', $link );
 }

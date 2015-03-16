@@ -1,6 +1,6 @@
 <?php
 /**
- * General theme helper functions.
+ * Flagship Footer Widgets Class.
  *
  * @package     FlagshipLibrary
  * @subpackage  HybridCore
@@ -45,8 +45,9 @@ class Flagship_Footer_Widgets {
 	 * @return void
 	 */
 	private function wp_hooks() {
-		add_action( 'widgets_init', array( $this, 'register_footer_widgets' ) );
-		add_action( 'tha_footer_before', array( $this, 'the_footer_widgets' ) );
+		add_action( 'widgets_init',               array( $this, 'register_footer_widgets' ) );
+		add_action( 'hybrid_attr_footer-widgets', array( $this, 'attr_footer_widgets' ) );
+		add_action( 'tha_footer_before',          array( $this, 'the_footer_widgets' ) );
 	}
 
 	/**
@@ -79,6 +80,20 @@ class Flagship_Footer_Widgets {
 	}
 
 	/**
+	 * Footer widgets element attributes.
+	 *
+	 * @since  1.4.0
+	 * @access public
+	 * @param  array   $attr
+	 * @return array
+	 */
+	function attr_footer_widgets( $attr ) {
+		$attr['id']    = 'footer-widgets';
+		$attr['class'] = 'footer-widgets';
+		return $attr;
+	}
+
+	/**
 	 * Displays all registered footer widget areas using a template.
 	 *
 	 * @since  1.0.0
@@ -98,15 +113,10 @@ class Flagship_Footer_Widgets {
 
 		$counter = $this->counter;
 
-		?>
-		<div <?php hybrid_attr( 'footer-widgets' ); ?>>
-			<div <?php hybrid_attr( 'wrap', 'footer-widgets' ); ?>>
-				<?php while ( $counter <= absint( $this->footer_widgets[0] ) ) : ?>
-					<?php include( locate_template( 'sidebar/footer-widgets.php' ) ); ?>
-					<?php $counter++; ?>
-				<?php endwhile; ?>
-			</div>
-		</div>
-		<?php
+		// Use the theme's footer widgets template if it exists.
+		if ( '' !== locate_template( 'flagship/footer-widgets.php' ) ) {
+			return require_once locate_template( 'flagship/footer-widgets.php' );
+		}
+		require_once flagship_library()->dir . 'templates/footer-widgets.php';
 	}
 }
