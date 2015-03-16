@@ -43,7 +43,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @since 1.4.0
 		 * @type  string
 		 */
-		protected $dir;
+		public $dir;
 
 		/**
 		 * Placeholder for our style builder class instance.
