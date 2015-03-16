@@ -15,7 +15,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 	/**
 	 * Class for common Flagship theme functionality.
 	 *
-	 * @version 1.4.0
+	 * @version 1.4.1
 	 */
 	class Flagship_Library {
 
@@ -25,7 +25,7 @@ if ( ! class_exists( 'Flagship_Library' ) ) {
 		 * @since 1.1.0
 		 * @type  string
 		 */
-		protected $version = '1.4.0';
+		protected $version = '1.4.1';
 
 		/**
 		 * Prefix to prevent conflicts.
