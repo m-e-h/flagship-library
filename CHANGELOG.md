@@ -1,5 +1,9 @@
 # Changelog for Flagship Library
 
+## 1.4.1
+
+Fixed a fatal error by making Flagship_Library::$dir public rather than protected.
+
 ## 1.4.0
 
 This is a fairly significant update. The entire library structure was rewritten, primarily to reduce the overall memory footprint of the library. Backwards compatibility has been maintained, but quite a few functions have been deprecated and replaced. You'll find them in the `functions/deprecated.php` file and you can expect them to be removed sometime in the near future. Many of these functions were deprecated because of internal refactoring, but some were removed because new functions in Hybrid Core 2.1.0 will be replacing them. You shouldn't notice any significant changes in functionality for existing features and extensions. It should be noted that it's no longer necessary to `add_theme_support( 'title-tag' )` as Hybrid Core 2.1.0 will add it by default.
