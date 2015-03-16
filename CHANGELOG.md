@@ -2,7 +2,8 @@
 
 ## 1.4.1
 
-Fixed a fatal error by making Flagship_Library::$dir public rather than protected.
+- Fixed a fatal error by making Flagship_Library::$dir public rather than protected.
+- Fixed an undefined variable in the author box admin settings.
 
 ## 1.4.0
 
