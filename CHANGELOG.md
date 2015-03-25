@@ -1,5 +1,9 @@
 # Changelog for Flagship Library
 
+## 1.4.2
+
+- Fixed a bug which was causing author box settings to be overwritten in the admin.
+
 ## 1.4.1
 
 - Fixed a fatal error by making Flagship_Library::$dir public rather than protected.
