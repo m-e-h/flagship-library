@@ -127,6 +127,20 @@ function flagship_attr_header_class( $attr ) {
 }
 
 /**
+ * Add URL itemprop to WordPress menu items.
+ *
+ * @deprecated 1.4.2
+ * @since  1.4.0
+ * @access public
+ * @param  $atts array Existing link attributes.
+ * @return $atts array Amended comment attributes.
+ */
+function flagship_add_menu_atts( $atts ) {
+	_deprecated_function( __FUNCTION__, '1.4.2' );
+	return $atts;
+}
+
+/**
  * Page <footer> element attributes.
  *
  * @deprecated 1.4.0
