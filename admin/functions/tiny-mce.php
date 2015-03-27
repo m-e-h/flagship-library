@@ -105,13 +105,13 @@ function flagship_tiny_mce_formats( $args ) {
 					array(
 						'title'    => __( 'Primary', 'flagship-library' ),
 						'selector' => 'a',
-						'classes'  => 'button',
+						'classes'  => 'button primary',
 						'exact'    => true,
 					),
 					array(
 						'title'    => __( 'Primary Block', 'flagship-library' ),
 						'selector' => 'a',
-						'classes'  => 'button block',
+						'classes'  => 'button primary block',
 						'exact'    => true,
 					),
 					array(
