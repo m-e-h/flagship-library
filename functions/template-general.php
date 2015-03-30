@@ -397,11 +397,11 @@ function flagship_get_customizer_link( $args = array() ) {
 }
 
 /**
- * Returns a formatted theme credit link.
+ * Outputs a formatted theme credit link.
  *
  * @since  1.1.0
  * @access public
- * @return string
+ * @return void
  */
 function flagship_credit_link() {
 	echo flagship_get_credit_link();
@@ -421,4 +421,31 @@ function flagship_get_credit_link() {
 		'Flagship'
 	);
 	return apply_filters( 'flagship_credit_link', $link );
+}
+
+/**
+* outputs a formatted link to the theme landing page.
+ *
+ * @since  1.4.3
+ * @access public
+ * @return void
+ */
+function flagship_theme_link() {
+	echo flagship_get_theme_link();
+}
+
+/**
+ * Returns a formatted link to the theme landing page.
+ *
+ * @since  1.4.3
+ * @access public
+ * @return string
+ */
+function flagship_get_theme_link() {
+	$link = sprintf( '<a class="theme-link" href="%s"title="%s">%s</a>',
+		html_entity_decode( 'https://flagshipwp.com/&#99;ompass/' ),
+		__( 'The Most Advanced WordPress Starter Theme Ever Created', 'flagship-library' ),
+		html_entity_decode( '&#67;ompass' )
+	);
+	return apply_filters( 'flagship_theme_link', $link );
 }
